@@ -18,12 +18,6 @@ func calcScore(_ i: UInt32) -> Double {
     return Double(ct) / 32
 }
 
-func select(group: [UInt32], cumulativeOdds: [Double]) -> UInt32 {
-    let r = rand()
-    let index = cumulativeOdds.index { $0 > r }!
-    return group[index]
-}
-
 func crossover(_ lhs: UInt32, _ rhs: UInt32) -> UInt32 {
     let mask: UInt32
     do {
@@ -80,8 +74,8 @@ class OneMaxTests: XCTestCase {
             
             // crossover
             for _ in 1..<N {
-                let g1 = select(group: group, cumulativeOdds: cumulativeOdds)
-                let g2 = select(group: group, cumulativeOdds: cumulativeOdds)
+                let g1 = group.randomPick(cumulativeOdds: cumulativeOdds)
+                let g2 = group.randomPick(cumulativeOdds: cumulativeOdds)
                 
                 let new = crossover(g1, g2)
                 nextGroup.append(new)

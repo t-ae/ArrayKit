@@ -35,3 +35,20 @@ extension Array where Element: Comparable {
         return argsort(by: <)
     }
 }
+
+extension Array {
+    public mutating func mask(by mask: [Bool]) {
+        precondition(mask.count == count, "`mask` is not valid permutation.")
+        for i in (0..<count).reversed() {
+            if !mask[i] {
+                self.remove(at: i)
+            }
+        }
+    }
+    
+    public func masked(by mask: [Bool]) -> Array {
+        var result = self
+        result.mask(by: mask)
+        return result
+    }
+}

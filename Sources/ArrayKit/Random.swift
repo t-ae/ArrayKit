@@ -6,6 +6,12 @@ func rand_uniform() -> Double {
 }
 
 extension Array {
+    
+    public func randomPick() -> Element {
+        let odds = 1 / Double(count)
+        return randomPick(by: [Double](repeating: odds, count: count))
+    }
+    
     public func randomPick(by odds: [Double]) -> Element {
         precondition(odds.count == count, "`odds` size must match with array size.")
         

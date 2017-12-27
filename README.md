@@ -1,3 +1,3 @@
 # ArrayKit
 
-A description of this package.
+`Array` utilities for Swift.

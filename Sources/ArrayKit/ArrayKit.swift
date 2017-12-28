@@ -32,6 +32,21 @@ extension Array {
         let sorted = self.enumerated().sorted { areInIncreasingOrder($0.1, $1.1) }
         return sorted.map { $0.0 }
     }
+    
+    /// Rotate array.
+    public mutating func rotate(n: Int) {
+        // TODO: In-place version is better?
+        self = rotated(n: n)
+    }
+    
+    /// Rotate array.
+    public func rotated(n: Int) -> Array {
+        var n = n % count
+        if n < 0 {
+            n += count
+        }
+        return Array(self[n...] + self[..<n])
+    }
 }
 
 extension Array where Element: Comparable {

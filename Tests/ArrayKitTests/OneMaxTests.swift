@@ -59,7 +59,6 @@ class OneMaxTests: XCTestCase {
             let odds = scores.map { $0 / sumScores }
             let cumulativeOdds = odds.scan(0, +)
             
-            
             var nextGroup = [[Bool]]()
             
             // elite

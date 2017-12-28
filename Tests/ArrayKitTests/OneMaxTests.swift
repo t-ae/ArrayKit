@@ -30,13 +30,15 @@ func describe(_ i: [Bool]) -> String {
 #if !SWIFT_PACKAGE
 class OneMaxTests: XCTestCase {
     
+    typealias Individual = [Bool]
+    
     let N = 128
     let length = 128
     
     func testOneMax() {
         
         // init
-        var group = [[Bool]]()
+        var group = [Individual]()
         for _ in 0..<N {
             group.append([Bool].makeRandomMask(odds: 0.5, count: length))
         }
@@ -45,7 +47,7 @@ class OneMaxTests: XCTestCase {
             print("Generation: \(i)")
             
             var scores = group.map(calcScore)
-            let sumScores = scores.reduce(0, +)
+            let sumScores = scores.sum()!
             let meanScores = sumScores / Double(N)
             let maxScore = scores.max()!
             print("mean: \(meanScores) max: \(maxScore)")
@@ -60,7 +62,7 @@ class OneMaxTests: XCTestCase {
             let odds = scores.map { $0 / sumScores }
             let cumulativeOdds = odds.scan(0, +)
             
-            var nextGroup = [[Bool]]()
+            var nextGroup = [Individual]()
             
             // elite
             nextGroup.append(group.last!)

@@ -54,4 +54,13 @@ class BoolTests: XCTestCase {
         }
     }
     
+    func testRandomMask() {
+        let N = 100000
+        let odds = 0.5
+        let mask = [Bool].makeRandomMask(odds: odds, count: N)
+        
+        let mean = Double(mask.filter { $0 }.count) / Double(N)
+        
+        XCTAssertEqual(mean, odds, accuracy: 1e-1)
+    }
 }

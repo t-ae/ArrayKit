@@ -29,16 +29,23 @@ func randint(_ upperBound: Int) -> Int {
 extension Array {
     
     /// Pick one element with even odds.
-    public func randomPick() -> Element {
+    public func randomPick() -> Element? {
+        guard count > 0 else {
+            return nil
+        }
         let index = randint(count)
         return self[index]
     }
     
     /// Pick one element.
     /// - Parameter odds: The probabilities associated with each element.
-    /// - Warning: Many small odds may cause computation error. Use `randomPick(cumulativeOdds:)` instead.
-    public func randomPick(by odds: [Double]) -> Element {
+    /// - Warning: Small odds may cause computation error. Use `randomPick(cumulativeOdds:)` or `randomPick(weights:)` instead.
+    public func randomPick(by odds: [Double]) -> Element? {
         precondition(odds.count == count, "`odds` size must match with array size.")
+        
+        guard count > 0 else {
+            return nil
+        }
         
         let r = randUniform()
         
@@ -55,11 +62,38 @@ extension Array {
     /// Pick one element.
     /// - Paramter:
     ///   - cumulativeOdds: The cumulative probabilities associated with each element.
-    public func randomPick(cumulativeOdds: [Double]) -> Element {
+    public func randomPick(cumulativeOdds: [Double]) -> Element? {
         precondition(cumulativeOdds.count == count, "`cumulativeOdds` size must match with array size.")
+        
+        guard count > 0 else {
+            return nil
+        }
+        
         let r = randUniform()
         let index = cumulativeOdds.index { $0 > r }!
         return self[index]
+    }
+    
+    /// Pick one element.
+    /// - Paramter:
+    ///   - weights: The weights associated with each element.
+    public func randomPick(weights: [Int]) -> Element? {
+        precondition(weights.count == count, "`weights` size must match with array size.")
+        
+        guard count > 0 else {
+            return nil
+        }
+        
+        let weightSum = weights.sum()!
+        let r = randint(weightSum)
+        var acc = 0
+        for i in 0..<weights.count {
+            acc += weights[i]
+            if r < acc {
+                return self[i]
+            }
+        }
+        preconditionFailure("No elements picked.")
     }
 }
 

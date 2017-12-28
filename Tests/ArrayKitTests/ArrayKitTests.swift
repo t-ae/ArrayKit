@@ -35,26 +35,4 @@ class ArrayKitTests: XCTestCase {
             XCTAssertEqual(array.scan(1, *), [])
         }
     }
-    
-    func testShuffle() {
-        do {
-            let array = Array(0..<64)
-            let shuffled = array.shuffled()
-            
-            XCTAssertEqual(Set(shuffled), Set(array))
-            XCTAssertNotEqual(shuffled, array)
-        }
-        do {
-            let array = [3]
-            let shuffled = array.shuffled()
-            
-            XCTAssertEqual(shuffled, array)
-        }
-        do {
-            let array = [Int]()
-            let shuffled = array.shuffled()
-            
-            XCTAssertEqual(shuffled, array)
-        }
-    }
 }

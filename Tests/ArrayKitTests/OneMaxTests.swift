@@ -67,8 +67,8 @@ class OneMaxTests: XCTestCase {
             
             // crossover
             for _ in 1..<N {
-                let g1 = group.randomPick(cumulativeOdds: cumulativeOdds)
-                let g2 = group.randomPick(cumulativeOdds: cumulativeOdds)
+                let g1 = group.randomPick(cumulativeOdds: cumulativeOdds)!
+                let g2 = group.randomPick(cumulativeOdds: cumulativeOdds)!
                 
                 let new = crossover(g1, g2)
                 nextGroup.append(new)

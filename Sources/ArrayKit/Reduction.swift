@@ -9,6 +9,16 @@ extension Array where Element: Numeric {
     }
 }
 
+extension Array where Element: Comparable {
+    /// Returns median of elements.
+    public func median() -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        return quickSelect(k: count/2)
+    }
+}
+
 extension Array where Element == Int {
     /// Returns mean of elements.
     public func mean() -> Double? {

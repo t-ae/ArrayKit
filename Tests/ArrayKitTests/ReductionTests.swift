@@ -4,6 +4,13 @@ import ArrayKit
 
 class ReductionTests: XCTestCase {
     
+    func testMedian() {
+        do {
+            let array = [Int](0..<100).shuffled()
+            XCTAssertEqual(array.median(), 50)
+        }
+    }
+    
     func testSum() {
         do {
             let array = [Int](0..<5)

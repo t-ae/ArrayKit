@@ -49,4 +49,17 @@ class ArrayKitTests: XCTestCase {
             XCTAssertEqual(array.rotated(n: 5), [1, 2, 3, 0])
         }
     }
+    
+    func testQuickSelect() {
+        do {
+            let array = [Int](0..<1).shuffled()
+            XCTAssertEqual(array.quickSelect(k: 0), 0)
+        }
+        do {
+            let array = [Int](0..<100).shuffled()
+            XCTAssertEqual(array.quickSelect(k: 10), 10)
+            XCTAssertEqual(array.quickSelect(k: 20), 20)
+            XCTAssertEqual(array.quickSelect(k: 30), 30)
+        }
+    }
 }

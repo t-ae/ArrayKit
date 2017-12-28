@@ -1,42 +1,46 @@
 
 import XCTest
+import ArrayKit
 
 func rand() -> Double {
     return Double(arc4random()) / Double(UInt32.max)
 }
 
-func calcScore(_ i: UInt32) -> Double {
-    let str = String(i, radix: 2)
-    let ones = str.filter { $0 == "1" }
-    let ct = ones.count
-    return Double(ct) / 32
+func calcScore(_ i: [Bool]) -> Double {
+    return Double(i.filter { $0 }.count) / Double(i.count)
 }
 
-func crossover(_ lhs: UInt32, _ rhs: UInt32) -> UInt32 {
-    let mask: UInt32
-    do {
-        let a = arc4random_uniform(31) + 1 // 1 ~ 32
-        let b = arc4random_uniform(a - 1) // 0 ~ a-1
-        mask = (UInt32.max >> a) << b
+func crossover(_ lhs: [Bool], _ rhs: [Bool]) -> [Bool] {
+    assert(lhs.count == rhs.count)
+    
+    let right = arc4random_uniform(UInt32(lhs.count))
+    let left = arc4random_uniform(right)
+    
+    var result = lhs
+    for i in Int(left)...Int(right) {
+        result[i] = rhs[i]
     }
-    
-    return (lhs & mask) | (rhs & ~mask)
-    
+    return result
+}
+
+func describe(_ i: [Bool]) -> String {
+    return String(i.map { $0 ? "1" : "0" })
 }
 
 class OneMaxTests: XCTestCase {
     
     let N = 128
+    let length = 128
     
     func testOneMax() {
         
         // init
-        var group = [UInt32]()
+        var group = [[Bool]]()
         for _ in 0..<N {
-            group.append(arc4random())
+            group.append([Bool].makeRandomMask(odds: 0.5, count: length))
         }
         
-        for i in 1..<10000 {
+        for i in 1..<3000 {
             print("Generation: \(i)")
             
             var scores = group.map(calcScore)
@@ -44,12 +48,6 @@ class OneMaxTests: XCTestCase {
             let meanScores = sumScores / Double(N)
             let maxScore = scores.max()!
             print("mean: \(meanScores) max: \(maxScore)")
-            
-            let f = group.first!
-            if group.filter({ $0 != f }).isEmpty {
-                print("all same")
-                break
-            }
             
             if meanScores > 0.99 || maxScore == 1 {
                 break
@@ -62,7 +60,8 @@ class OneMaxTests: XCTestCase {
             let cumulativeOdds = odds.scan(0, +)
             
             
-            var nextGroup = [UInt32]()
+            var nextGroup = [[Bool]]()
+            
             // elite
             nextGroup.append(group.last!)
             
@@ -76,18 +75,11 @@ class OneMaxTests: XCTestCase {
             }
             
             // mutation
-            for i in 0..<N {
+            for i in 1..<N {
                 if rand() < 0.01 {
-                    var a: UInt32 = 0
-                    for _ in 0..<32 {
-                        a <<= 1
-                        if rand() < 0.05 {
-                            a += 1
-                        }
-                    }
-                    print("mutate: \(String(a, radix: 2))")
-                    let new = a & (a ^ nextGroup[i]) | ~a & nextGroup[i]
-                    nextGroup[i] = new
+                    /// flip if true
+                    let mask = [Bool].makeRandomMask(odds: 0.01, count: length)
+                    nextGroup[i] = nextGroup[i] ^ mask
                 }
             }
             
@@ -97,7 +89,7 @@ class OneMaxTests: XCTestCase {
         let scores = group.map(calcScore)
         let index = scores.index(of: scores.max()!)!
         let answer = group[index]
-        print("answer: \(String(answer, radix: 2))")
+        print("answer: \(describe(answer))")
         
     }
     

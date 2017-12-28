@@ -2,9 +2,9 @@
 import XCTest
 import ArrayKit
 
-class PermutationsTests: XCTestCase {
+class PermutationTests: XCTestCase {
     
-    func testPermutations() {
+    func testPermutation() {
         do {
             let array = [3, 4, 5]
             var perms = array.permutations().makeIterator()

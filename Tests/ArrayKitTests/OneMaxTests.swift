@@ -1,9 +1,3 @@
-//
-//  OneMaxTests.swift
-//  ArrayKitTests
-//
-//  Created by Araki Takehiro on 2017/12/27.
-//
 
 import XCTest
 

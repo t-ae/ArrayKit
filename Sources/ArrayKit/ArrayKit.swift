@@ -58,7 +58,7 @@ extension Array where Element: Comparable {
 
 extension Array {
     /// Drop elements which corresponding `mask` value is `false`.
-    public mutating func mask(by mask: [Bool]) {
+    public mutating func mask(with mask: [Bool]) {
         precondition(mask.count == count, "`mask` is not valid permutation.")
         for i in (0..<count).reversed() {
             if !mask[i] {
@@ -68,9 +68,9 @@ extension Array {
     }
     
     /// Drop elements which corresponding `mask` value is `false`.
-    public func masked(by mask: [Bool]) -> Array {
+    public func masked(with mask: [Bool]) -> Array {
         var result = self
-        result.mask(by: mask)
+        result.mask(with: mask)
         return result
     }
 }

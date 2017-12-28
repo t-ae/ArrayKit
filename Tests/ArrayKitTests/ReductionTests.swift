@@ -13,8 +13,8 @@ class ReductionTests: XCTestCase {
     
     func testSum() {
         do {
-            let array = [Int](0..<5)
-            XCTAssertEqual(array.sum(), 10)
+            let array = [Int](0..<10000)
+            XCTAssertEqual(array.sum(), array.reduce(0, +))
         }
         do {
             let array = (0..<5).map { Float($0) }

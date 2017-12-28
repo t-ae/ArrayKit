@@ -1,31 +1,20 @@
 
-extension Sequence {
-    public func all(_ predicate: (Element)->Bool) -> Bool {
-        for e in self {
-            if !predicate(e) {
-                return false
-            }
-        }
-        return true
-    }
-    
-    public func some(_ predicate: (Element)->Bool) -> Bool {
-        for e in self {
-            if predicate(e) {
-                return true
-            }
-        }
-        return false
-    }
-}
-
 extension Array where Element: Numeric {
     /// Returns sum of elements.
     public func sum() -> Element? {
-        guard let first = self.first else {
+        guard count > 0 else {
             return nil
         }
-        return self.dropFirst().reduce(first, +)
+        
+        // To mitigate conmutation error.
+        var queue = self
+        while queue.count > 1 {
+            let first = queue.popLast()!
+            let second = queue.popLast()!
+            queue.insert(first + second, at: 0)
+        }
+        
+        return queue[0]
     }
 }
 

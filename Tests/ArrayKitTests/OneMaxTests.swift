@@ -27,6 +27,7 @@ func describe(_ i: [Bool]) -> String {
     return String(i.map { $0 ? "1" : "0" })
 }
 
+#if !SWIFT_PACKAGE
 class OneMaxTests: XCTestCase {
     
     let N = 128
@@ -66,8 +67,8 @@ class OneMaxTests: XCTestCase {
             
             // crossover
             for _ in 1..<N {
-                let g1 = group.randomPick(cumulativeOdds: cumulativeOdds)!
-                let g2 = group.randomPick(cumulativeOdds: cumulativeOdds)!
+                let g1 = group.randomPick(cumulativeWeights: cumulativeOdds)!
+                let g2 = group.randomPick(cumulativeWeights: cumulativeOdds)!
                 
                 let new = crossover(g1, g2)
                 nextGroup.append(new)
@@ -91,5 +92,5 @@ class OneMaxTests: XCTestCase {
         print("answer: \(describe(answer))")
         
     }
-    
 }
+#endif

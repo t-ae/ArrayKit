@@ -102,7 +102,6 @@ extension Array where Element: Comparable {
             }
             
             // For all i < sep, array[i] < pivot
-            print("\(sep), \(left)..<\(right), \(pivot)")
             if k < sep {
                 right = sep
             } else {

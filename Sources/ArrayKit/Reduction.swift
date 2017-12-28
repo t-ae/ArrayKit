@@ -1,4 +1,24 @@
 
+extension Sequence {
+    public func all(_ predicate: (Element)->Bool) -> Bool {
+        for e in self {
+            if !predicate(e) {
+                return false
+            }
+        }
+        return true
+    }
+    
+    public func some(_ predicate: (Element)->Bool) -> Bool {
+        for e in self {
+            if predicate(e) {
+                return true
+            }
+        }
+        return false
+    }
+}
+
 extension Array where Element: Numeric {
     /// Returns sum of elements.
     public func sum() -> Element? {

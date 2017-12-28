@@ -56,21 +56,23 @@ extension Array {
                 return self[i]
             }
         }
-        fatalError("No elements picked. Maybe sum of odds(\(acc) < 1?")
+        fatalError("No elements picked. Maybe sum of `odds`(\(acc)) < 1.")
     }
     
     /// Pick one element.
     /// - Paramter:
-    ///   - cumulativeOdds: The cumulative probabilities associated with each element.
-    public func randomPick(cumulativeOdds: [Double]) -> Element? {
-        precondition(cumulativeOdds.count == count, "`cumulativeOdds` size must match with array size.")
+    ///   - cumulativeWeights: The cumulative weights associated with each element.
+    public func randomPick(cumulativeWeights: [Double]) -> Element? {
+        precondition(cumulativeWeights.count == count, "`cumulativeWeights` size must match with array size.")
+        precondition(zip(cumulativeWeights, cumulativeWeights.dropFirst()).all { $0 <= $1 },
+                     "`cumulativeWeights` is not ascending.")
         
         guard count > 0 else {
             return nil
         }
         
-        let r = randUniform()
-        let index = cumulativeOdds.index { $0 > r }!
+        let r = randUniform() * cumulativeWeights.last!
+        let index = cumulativeWeights.index { $0 > r }!
         return self[index]
     }
     

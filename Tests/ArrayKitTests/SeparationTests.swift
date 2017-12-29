@@ -45,7 +45,7 @@ class SeparationTests: XCTestCase {
     func testChunk() {
         do {
             let array = [Int](0..<10)
-            let result = array.chunk(by: 3)
+            let result = array.chunk(3)
             
             XCTAssertEqual(result, [ArraySlice(0..<3),
                                     ArraySlice(3..<6),
@@ -54,7 +54,7 @@ class SeparationTests: XCTestCase {
         }
         do {
             let array = [Int](0..<12)
-            let result = array.chunk(by: 3)
+            let result = array.chunk(3)
             
             XCTAssertEqual(result, [ArraySlice(0..<3),
                                     ArraySlice(3..<6),
@@ -63,7 +63,7 @@ class SeparationTests: XCTestCase {
         }
         do {
             let array = [Int](0..<3)
-            let result = array.chunk(by: 5)
+            let result = array.chunk(5)
             
             XCTAssertEqual(result, [ArraySlice(0..<3)])
         }

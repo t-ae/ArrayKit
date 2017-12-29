@@ -40,7 +40,7 @@ extension Array {
     
     /// Separates array into slices of `size`.
     /// Note: If `count % size != 0`, last slice has fewer elements.
-    public func chunk(by size: Int) -> [ArraySlice<Element>] {
+    public func chunk(_ size: Int) -> [ArraySlice<Element>] {
         var result = [ArraySlice<Element>]()
         result.reserveCapacity(count/size)
         

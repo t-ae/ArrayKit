@@ -9,12 +9,12 @@ class PermutationSequenceTests: XCTestCase {
             let array = [3, 4, 5]
             var perms = array.permutations().makeIterator()
             
-            XCTAssertEqual(perms.next()!, [3, 4, 5])
-            XCTAssertEqual(perms.next()!, [3, 5, 4])
-            XCTAssertEqual(perms.next()!, [4, 3, 5])
-            XCTAssertEqual(perms.next()!, [4, 5, 3])
-            XCTAssertEqual(perms.next()!, [5, 3, 4])
-            XCTAssertEqual(perms.next()!, [5, 4, 3])
+            XCTAssertEqual(perms.next(), [3, 4, 5])
+            XCTAssertEqual(perms.next(), [3, 5, 4])
+            XCTAssertEqual(perms.next(), [4, 3, 5])
+            XCTAssertEqual(perms.next(), [4, 5, 3])
+            XCTAssertEqual(perms.next(), [5, 3, 4])
+            XCTAssertEqual(perms.next(), [5, 4, 3])
             XCTAssertNil(perms.next())
         }
         
@@ -22,12 +22,12 @@ class PermutationSequenceTests: XCTestCase {
             let array = [3, 4, 5]
             var perms = array.permutations(k: 2).makeIterator()
             
-            XCTAssertEqual(perms.next()!, [3, 4])
-            XCTAssertEqual(perms.next()!, [3, 5])
-            XCTAssertEqual(perms.next()!, [4, 3])
-            XCTAssertEqual(perms.next()!, [4, 5])
-            XCTAssertEqual(perms.next()!, [5, 3])
-            XCTAssertEqual(perms.next()!, [5, 4])
+            XCTAssertEqual(perms.next(), [3, 4])
+            XCTAssertEqual(perms.next(), [3, 5])
+            XCTAssertEqual(perms.next(), [4, 3])
+            XCTAssertEqual(perms.next(), [4, 5])
+            XCTAssertEqual(perms.next(), [5, 3])
+            XCTAssertEqual(perms.next(), [5, 4])
             XCTAssertNil(perms.next())
         }
         
@@ -42,7 +42,7 @@ class PermutationSequenceTests: XCTestCase {
             let array = [3, 4, 5]
             var perms = array.permutations(k: 0).makeIterator()
             
-            XCTAssertEqual(perms.next()!, [])
+            XCTAssertEqual(perms.next(), [])
             XCTAssertNil(perms.next())
         }
         
@@ -50,7 +50,7 @@ class PermutationSequenceTests: XCTestCase {
             let array = [Int]()
             var perms = array.permutations().makeIterator()
             
-            XCTAssertEqual(perms.next()!, [])
+            XCTAssertEqual(perms.next(), [])
             XCTAssertNil(perms.next())
         }
     }

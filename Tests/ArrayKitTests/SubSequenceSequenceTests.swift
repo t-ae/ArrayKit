@@ -9,13 +9,13 @@ class SubSequenceSequenceTests: XCTestCase {
             let array = [3, 4, 5]
             var subs = array.subSequences().makeIterator()
             
-            XCTAssertEqual(subs.next()!, ArraySlice([]))
-            XCTAssertEqual(subs.next()!, ArraySlice([3]))
-            XCTAssertEqual(subs.next()!, ArraySlice([4]))
-            XCTAssertEqual(subs.next()!, ArraySlice([5]))
-            XCTAssertEqual(subs.next()!, ArraySlice([3, 4]))
-            XCTAssertEqual(subs.next()!, ArraySlice([4, 5]))
-            XCTAssertEqual(subs.next()!, ArraySlice([3, 4, 5]))
+            XCTAssertEqual(subs.next(), [])
+            XCTAssertEqual(subs.next(), [3])
+            XCTAssertEqual(subs.next(), [4])
+            XCTAssertEqual(subs.next(), [5])
+            XCTAssertEqual(subs.next(), [3, 4])
+            XCTAssertEqual(subs.next(), [4, 5])
+            XCTAssertEqual(subs.next(), [3, 4, 5])
             XCTAssertNil(subs.next())
         }
         
@@ -23,8 +23,8 @@ class SubSequenceSequenceTests: XCTestCase {
             let array = [3, 4, 5]
             var subs = array.subSequences(of: 2).makeIterator()
             
-            XCTAssertEqual(subs.next()!, ArraySlice([3, 4]))
-            XCTAssertEqual(subs.next()!, ArraySlice([4, 5]))
+            XCTAssertEqual(subs.next(), [3, 4])
+            XCTAssertEqual(subs.next(), [4, 5])
             XCTAssertNil(subs.next())
         }
         
@@ -39,7 +39,7 @@ class SubSequenceSequenceTests: XCTestCase {
             let array = [Int]()
             var subs = array.subSequences().makeIterator()
             
-            XCTAssertEqual(subs.next()!, ArraySlice([]))
+            XCTAssertEqual(subs.next(), [])
             XCTAssertNil(subs.next())
         }
     }

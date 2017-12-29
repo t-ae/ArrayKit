@@ -10,9 +10,9 @@ class CombinationSequenceTests: XCTestCase {
             let array = [3, 4, 5]
             var combs = array.combinations(k: 1).makeIterator()
             
-            XCTAssertEqual(combs.next()!, [3])
-            XCTAssertEqual(combs.next()!, [4])
-            XCTAssertEqual(combs.next()!, [5])
+            XCTAssertEqual(combs.next(), [3])
+            XCTAssertEqual(combs.next(), [4])
+            XCTAssertEqual(combs.next(), [5])
             XCTAssertNil(combs.next())
         }
         
@@ -20,9 +20,9 @@ class CombinationSequenceTests: XCTestCase {
             let array = [3, 4, 5]
             var combs = array.combinations(k: 2).makeIterator()
             
-            XCTAssertEqual(combs.next()!, [3, 4])
-            XCTAssertEqual(combs.next()!, [3, 5])
-            XCTAssertEqual(combs.next()!, [4, 5])
+            XCTAssertEqual(combs.next(), [3, 4])
+            XCTAssertEqual(combs.next(), [3, 5])
+            XCTAssertEqual(combs.next(), [4, 5])
             XCTAssertNil(combs.next())
         }
         
@@ -30,7 +30,7 @@ class CombinationSequenceTests: XCTestCase {
             let array = [3, 4]
             var combs = array.combinations(k: 2).makeIterator()
             
-            XCTAssertEqual(combs.next()!, [3, 4])
+            XCTAssertEqual(combs.next(), [3, 4])
             XCTAssertNil(combs.next())
         }
         
@@ -38,11 +38,11 @@ class CombinationSequenceTests: XCTestCase {
             let array = [3, 4, 5, 6, 7]
             var combs = array.combinations(k: 4).makeIterator()
             
-            XCTAssertEqual(combs.next()!, [3, 4, 5, 6])
-            XCTAssertEqual(combs.next()!, [3, 4, 5, 7])
-            XCTAssertEqual(combs.next()!, [3, 4, 6, 7])
-            XCTAssertEqual(combs.next()!, [3, 5, 6, 7])
-            XCTAssertEqual(combs.next()!, [4, 5, 6, 7])
+            XCTAssertEqual(combs.next(), [3, 4, 5, 6])
+            XCTAssertEqual(combs.next(), [3, 4, 5, 7])
+            XCTAssertEqual(combs.next(), [3, 4, 6, 7])
+            XCTAssertEqual(combs.next(), [3, 5, 6, 7])
+            XCTAssertEqual(combs.next(), [4, 5, 6, 7])
             XCTAssertNil(combs.next())
         }
         
@@ -57,7 +57,7 @@ class CombinationSequenceTests: XCTestCase {
             let array = [1, 2, 3]
             var combs = array.combinations(k: 0).makeIterator()
             
-            XCTAssertEqual(combs.next()!, [])
+            XCTAssertEqual(combs.next(), [])
             XCTAssertNil(combs.next())
         }
         
@@ -65,7 +65,7 @@ class CombinationSequenceTests: XCTestCase {
             let array = [Int]()
             var combs = array.combinations(k: 0).makeIterator()
             
-            XCTAssertEqual(combs.next()!, [])
+            XCTAssertEqual(combs.next(), [])
             XCTAssertNil(combs.next())
         }
     }

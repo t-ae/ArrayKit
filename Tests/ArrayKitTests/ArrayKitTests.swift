@@ -3,19 +3,6 @@ import ArrayKit
 
 class ArrayKitTests: XCTestCase {
     
-    func testArgSort() {
-        do {
-            let array = [3, 4, 2, 1, 5, 0]
-            XCTAssertEqual(array.argsort(), [5, 3, 2, 0, 1, 4])
-            XCTAssertEqual(array.argsort(by: >), [4, 1, 0, 2, 3, 5])
-        }
-        do {
-            let array = [3]
-            XCTAssertEqual(array.argsort(), [0])
-            XCTAssertEqual(array.argsort(by: >), [0])
-        }
-    }
-    
     func testPermute() {
         do {
             let array = [0, 1, 2, 3, 4, 5]
@@ -47,32 +34,6 @@ class ArrayKitTests: XCTestCase {
             XCTAssertEqual(array.rotated(n: 3), [3, 0, 1, 2])
             XCTAssertEqual(array.rotated(n: 4), [0, 1, 2, 3])
             XCTAssertEqual(array.rotated(n: 5), [1, 2, 3, 0])
-        }
-    }
-    
-    func testQuickSelect() {
-        do {
-            let array = [Int](0..<1).shuffled()
-            XCTAssertEqual(array.quickSelect(k: 0), 0)
-        }
-        do {
-            let array = [Int](0..<10).shuffled()
-            XCTAssertEqual(array.quickSelect(k: 0), 0)
-            XCTAssertEqual(array.quickSelect(k: 1), 1)
-            XCTAssertEqual(array.quickSelect(k: 2), 2)
-            XCTAssertEqual(array.quickSelect(k: 3), 3)
-            XCTAssertEqual(array.quickSelect(k: 4), 4)
-            XCTAssertEqual(array.quickSelect(k: 5), 5)
-            XCTAssertEqual(array.quickSelect(k: 6), 6)
-            XCTAssertEqual(array.quickSelect(k: 7), 7)
-            XCTAssertEqual(array.quickSelect(k: 8), 8)
-            XCTAssertEqual(array.quickSelect(k: 9), 9)
-        }
-        do {
-            let array = [Int](0..<100).shuffled()
-            XCTAssertEqual(array.quickSelect(k: 10), 10)
-            XCTAssertEqual(array.quickSelect(k: 20), 20)
-            XCTAssertEqual(array.quickSelect(k: 30), 30)
         }
     }
 }

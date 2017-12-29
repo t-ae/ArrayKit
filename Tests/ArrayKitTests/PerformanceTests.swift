@@ -83,3 +83,20 @@ extension PerformanceTests {
         }
     }
 }
+
+// MARKL - Rotate
+extension PerformanceTests {
+    func testRotate() {
+        var array = [Int](0..<1000000)
+        measure {
+            array.rotate(n: 100)
+        }
+    }
+    
+    func testRotated() {
+        var array = [Int](0..<1000000)
+        measure {
+            array = array.rotated(n: 100)
+        }
+    }
+}

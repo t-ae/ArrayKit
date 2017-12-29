@@ -9,6 +9,25 @@ class ReductionTests: XCTestCase {
             let array = [Int](0..<100).shuffled()
             XCTAssertEqual(array.median(), 50)
         }
+        do {
+            let array = [Int]()
+            XCTAssertNil(array.median())
+        }
+    }
+    
+    func testModes() {
+        do {
+            let array = [1, 2, 3, 4, 5, 4, 3, 4].shuffled()
+            XCTAssertEqual(array.modes(), [4])
+        }
+        do {
+            let array = [1, 2, 3, 4, 5, 4, 3, 4, 3].shuffled()
+            XCTAssertEqual(array.modes(), [3, 4])
+        }
+        do {
+            let array: [Int] = []
+            XCTAssertEqual(array.modes(), [])
+        }
     }
     
     func testSum() {

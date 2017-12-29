@@ -17,6 +17,36 @@ extension Array where Element: Comparable {
         }
         return quickSelect(k: count/2)
     }
+    
+    /// Returns array of modes.
+    /// - Returns: Array of modes (in ascending order).
+    public func modes() -> [Element] {
+        guard count > 0 else {
+            return []
+        }
+        
+        let array = self.sorted()
+        
+        var maxlen = 0
+        var currentModes = [Element]()
+        
+        var index = 0
+        while index < array.count {
+            let start = index
+            let current = array[index]
+            while index < array.count && array[index] == current {
+                index += 1
+            }
+            let len = index - start
+            if len > maxlen {
+                maxlen = len
+                currentModes = [current]
+            } else if len == maxlen {
+                currentModes.append(current)
+            }
+        }
+        return currentModes
+    }
 }
 
 extension Array where Element == Int {

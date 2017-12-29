@@ -13,8 +13,10 @@ func calcScore(_ i: [Bool]) -> Double {
 func crossover(_ lhs: [Bool], _ rhs: [Bool]) -> ([Bool], [Bool]) {
     assert(lhs.count == rhs.count)
     
-    let right = arc4random_uniform(UInt32(lhs.count))
-    let left = arc4random_uniform(right)
+    let i = [Int](0..<lhs.count).randomPick(n: 2)!
+    
+    let left = i.min()!
+    let right = i.max()!
     
     var resultL = lhs
     var resultR = rhs

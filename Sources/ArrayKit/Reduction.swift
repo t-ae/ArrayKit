@@ -2,19 +2,10 @@
 extension Array where Element: Numeric {
     /// Returns sum of elements.
     public func sum() -> Element? {
-        guard count > 0 else {
+        guard let f = self.first else {
             return nil
         }
-        
-        // To mitigate conmutation error.
-        var queue = self
-        while queue.count > 1 {
-            let first = queue.popLast()!
-            let second = queue.popLast()!
-            queue.insert(first + second, at: 0)
-        }
-        
-        return queue[0]
+        return self.dropFirst().reduce(f, +)
     }
 }
 
@@ -58,6 +49,32 @@ extension Array where Element == Int {
 }
 
 extension Array where Element: FloatingPoint {
+    /// Returns sum of elements.
+    public func sum() -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        
+        // To mitigate computation error.
+        var src = self
+        while src.count > 1 {
+            let c = (src.count+1)/2
+            var dst = [Element](repeating: 0, count: c)
+            for i in 0..<c-1 {
+                dst[i] = src[2*i] + src[2*i+1]
+            }
+            if src.count % 2 == 0 {
+                dst[c-1] = src[2*(c-1)] + src[2*(c-1)+1]
+            } else {
+                dst[c-1] = src[2*(c-1)]
+            }
+            
+            src = dst
+        }
+        
+        return src.first!
+    }
+    
     /// Returns mean of elements.
     public func mean() -> Element? {
         return self.sum().map { $0 / Element(self.count) }

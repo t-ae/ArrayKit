@@ -24,6 +24,10 @@ class ReductionTests: XCTestCase {
             let array = (0..<5).map { Double($0) }
             XCTAssertEqual(array.sum(), 10)
         }
+        do {
+            let array = (0..<5).map { Float80($0) }
+            XCTAssertEqual(array.sum(), 10)
+        }
         
         do {
             let array: [Int] = []
@@ -35,6 +39,10 @@ class ReductionTests: XCTestCase {
         }
         do {
             let array: [Double] = []
+            XCTAssertNil(array.sum())
+        }
+        do {
+            let array: [Float80] = []
             XCTAssertNil(array.sum())
         }
     }

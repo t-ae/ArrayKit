@@ -31,6 +31,15 @@ class SeparationTests: XCTestCase {
                                     ArraySlice(1..<2),
                                     ArraySlice(2..<3)])
         }
+        do {
+            let array = [Int](0..<3)
+            let result = array.split(4, omittingEmptySlices: false)
+            
+            XCTAssertEqual(result, [ArraySlice(0..<1),
+                                    ArraySlice(1..<2),
+                                    ArraySlice(2..<3),
+                                    ArraySlice()])
+        }
     }
     
     func testChunk() {

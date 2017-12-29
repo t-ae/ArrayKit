@@ -2,11 +2,16 @@
 extension Array {
     /// Separates array into `sections` slices.
     /// If `count < sections`, return array contains `count` single element slices.
-    /// Note: It doesn't require `count % sections == 0`. Each slices' sizes may differ.
-    public func split(_ sections: Int) -> [ArraySlice<Element>] {
-        
+    /// - Parameters:
+    ///   - sections: Number of sections the array will be splited into.
+    ///   - omittingEmptySlices: If `true`, return array won't contain empty slices.
+    public func split(_ sections: Int, omittingEmptySlices: Bool = true) -> [ArraySlice<Element>] {
         guard count >= sections else {
-            return (0..<count).map { self[$0..<$0+1] }
+            if omittingEmptySlices {
+                return (0..<count).map { self[$0..<$0+1] }
+            } else {
+                return (0..<count).map { self[$0..<$0+1] } + (count..<sections).map { _ in ArraySlice() }
+            }
         }
         
         let minSectionSize = self.count / sections

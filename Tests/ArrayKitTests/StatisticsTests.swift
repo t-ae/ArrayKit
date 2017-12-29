@@ -2,7 +2,7 @@
 import XCTest
 import ArrayKit
 
-class ReductionTests: XCTestCase {
+class StatisticsTests: XCTestCase {
     
     func testMedian() {
         do {

@@ -1,13 +1,13 @@
 
 extension Array {
-    /// Permute elements by `order`.
+    /// Permutes elements by `order`.
     public func permuted(by order: [Int]) -> Array {
         precondition(Set(order) == Set(0..<count), "`order` is not valid permutation.")
         
         return order.map { self[$0] }
     }
     
-    /// Permute elements by `order`.
+    /// Permutes elements by `order`.
     public mutating func permute(by order: [Int]) {
         self = permuted(by: order)
     }
@@ -18,13 +18,13 @@ extension Array {
         return sorted.map { $0.0 }
     }
     
-    /// Rotate array.
+    /// Rotates array.
     public mutating func rotate(n: Int) {
         // TODO: In-place version is better?
         self = rotated(n: n)
     }
     
-    /// Rotate array.
+    /// Rotates array.
     public func rotated(n: Int) -> Array {
         var n = n % count
         if n < 0 {
@@ -97,7 +97,7 @@ extension Array where Element: Comparable {
 }
 
 extension Array {
-    /// Drop elements which corresponding `mask` value is `false`.
+    /// Drops elements which corresponding `mask` value is `false`.
     public mutating func mask(with mask: [Bool]) {
         precondition(mask.count == count, "`mask` is not valid permutation.")
         for i in (0..<count).reversed() {
@@ -107,7 +107,7 @@ extension Array {
         }
     }
     
-    /// Drop elements which corresponding `mask` value is `false`.
+    /// Drops elements which corresponding `mask` value is `false`.
     public func masked(with mask: [Bool]) -> Array {
         var result = self
         result.mask(with: mask)

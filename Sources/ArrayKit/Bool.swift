@@ -36,29 +36,27 @@ public func ^(lhs: [Bool], rhs: [Bool]) -> [Bool] {
 
 extension Array where Element == Bool {
     
-    /// Make random mask array.
+    /// Makes random mask array.
     /// i-th element becomes `true` with the probability `odds[i]`.
     public static func makeRandomMask(odds: [Double]) -> [Bool] {
-        var result = [Bool]()
-        result.reserveCapacity(odds.count)
+        var result = [Bool](repeating: false, count: odds.count)
         
-        for o in odds {
+        for i in 0..<odds.count {
             let r = randUniform()
-            result.append(r < o)
+            result[i] = r < odds[i]
         }
         
         return result
     }
     
-    /// Make random mask array.
+    /// Makes random mask array.
     /// Each element becomes `true` with the probability `odds`.
     public static func makeRandomMask(odds: Double, count: Int) -> [Bool] {
-        var result = [Bool]()
-        result.reserveCapacity(count)
+        var result = [Bool](repeating: false, count: count)
         
-        for _ in 0..<count {
+        for i in 0..<count {
             let r = randUniform()
-            result.append(r < odds)
+            result[i] = r < odds
         }
         
         return result

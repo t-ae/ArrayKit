@@ -1,6 +1,6 @@
 
 extension Sequence {
-    /// Check if all elements satisfy `predicate`.
+    /// Checks if all elements satisfy `predicate`.
     public func all(_ predicate: (Element)->Bool) -> Bool {
         for e in self {
             if !predicate(e) {
@@ -10,7 +10,7 @@ extension Sequence {
         return true
     }
     
-    /// Check if one or more elements satisfy `predicate`.
+    /// Checks if one or more elements satisfy `predicate`.
     public func some(_ predicate: (Element)->Bool) -> Bool {
         for e in self {
             if predicate(e) {

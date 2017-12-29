@@ -15,12 +15,12 @@ func xorshift64bit() -> UInt64 {
     return xorshift_state_t
 }
 
-/// Generate random Double value from [0, 1].
+/// Generates random Double value from [0, 1].
 func randUniform() -> Double {
     return Double(xorshift64bit()) / Double(UInt64.max)
 }
 
-/// Generate random Int value.
+/// Generates random Int value.
 /// Excludes `upperBound`.
 func randint(_ upperBound: Int) -> Int {
     return Int(xorshift64bit() % UInt64(upperBound))
@@ -28,7 +28,7 @@ func randint(_ upperBound: Int) -> Int {
 
 extension Array {
     
-    /// Pick one element with even odds.
+    /// Picks one element with even odds.
     public func randomPick() -> Element? {
         guard count > 0 else {
             return nil
@@ -37,7 +37,7 @@ extension Array {
         return self[index]
     }
     
-    /// Pick one element.
+    /// Picks one element.
     /// - Parameter odds: The probabilities associated with each element.
     /// - Warning: Small odds may cause computation error. Use `randomPick(cumulativeOdds:)` or `randomPick(weights:)` instead.
     public func randomPick(by odds: [Double]) -> Element? {
@@ -59,7 +59,7 @@ extension Array {
         fatalError("No elements picked. Maybe sum of `odds`(\(acc)) < 1.")
     }
     
-    /// Pick one element.
+    /// Picks one element.
     /// - Paramter:
     ///   - cumulativeWeights: The cumulative weights associated with each element.
     public func randomPick(cumulativeWeights: [Double]) -> Element? {
@@ -76,7 +76,7 @@ extension Array {
         return self[index]
     }
     
-    /// Pick one element.
+    /// Picks one element.
     /// - Paramter:
     ///   - weights: The weights associated with each element.
     public func randomPick(weights: [Int]) -> Element? {
@@ -100,7 +100,7 @@ extension Array {
 }
 
 extension Array {
-    /// Shuffle array.
+    /// Shuffles array.
     public mutating func shuffle() {
         precondition(count <= UInt32.max, "Humongous arrays are not supported.")
         
@@ -112,7 +112,7 @@ extension Array {
         }
     }
     
-    /// Shuffle array.
+    /// Shuffles array.
     public func shuffled() -> Array {
         var result = self
         result.shuffle()

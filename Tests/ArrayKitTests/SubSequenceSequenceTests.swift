@@ -2,7 +2,7 @@
 import XCTest
 import ArrayKit
 
-class SubSequenceTests: XCTestCase {
+class SubSequenceSequenceTests: XCTestCase {
     
     func testSubSequences() {
         do {

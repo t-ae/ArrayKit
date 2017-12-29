@@ -2,7 +2,7 @@
 import XCTest
 import ArrayKit
 
-class CombinationTests: XCTestCase {
+class CombinationSequenceTests: XCTestCase {
     
     func testCombination() {
         

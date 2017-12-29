@@ -62,3 +62,22 @@ extension Array where Element == Bool {
         return result
     }
 }
+
+extension Array {
+    /// Drops elements which corresponding `mask` value is `false`.
+    public mutating func mask(with mask: [Bool]) {
+        precondition(mask.count == count, "`mask` is not valid permutation.")
+        for i in (0..<count).reversed() {
+            if !mask[i] {
+                self.remove(at: i)
+            }
+        }
+    }
+    
+    /// Drops elements which corresponding `mask` value is `false`.
+    public func masked(with mask: [Bool]) -> Array {
+        var result = self
+        result.mask(with: mask)
+        return result
+    }
+}

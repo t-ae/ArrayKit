@@ -2,7 +2,7 @@
 import XCTest
 import ArrayKit
 
-class BoolTests: XCTestCase {
+class MaskTests: XCTestCase {
     
     func testNegate() {
         do {

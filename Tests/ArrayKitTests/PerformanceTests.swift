@@ -100,3 +100,32 @@ extension PerformanceTests {
         }
     }
 }
+
+// MARK: Combinations
+extension PerformanceTests {
+    func testCombinations() {
+        let array = [Int](0..<300)
+        measure {
+            var count = 0
+            for c in array.combinations(k: 2) {
+                _ = c
+                count += 1
+            }
+            XCTAssertEqual(count, 300 * 299 / 2)
+        }
+    }
+    
+    func testCombinationsEquivalent() {
+        let array = [Int](0..<300)
+        measure {
+            var count = 0
+            for i in array.dropLast() {
+                for j in array[(i+1)...] {
+                    _ = [array[i], array[j]]
+                    count += 1
+                }
+            }
+            XCTAssertEqual(count, 300 * 299 / 2)
+        }
+    }
+}

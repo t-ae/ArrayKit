@@ -16,7 +16,6 @@ extension Array {
 extension Array {
     /// Rotates array.
     public mutating func rotate(n: Int) {
-        // TODO: In-place version is better?
         self = rotated(n: n)
     }
     

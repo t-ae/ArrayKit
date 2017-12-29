@@ -9,8 +9,15 @@ class RandomTests: XCTestCase {
             let N = 100000
             let dice = [1, 2, 3, 4, 5, 6]
             let rolls = (0..<N).map { _ in dice.randomPick()! }
-            let mean = Double(rolls.sum()!) / Double(N)
+            let mean = rolls.mean()!
             XCTAssertEqual(mean, 3.5, accuracy: 1e-1)
+        }
+        do {
+            let N = 100000
+            let coin = [0, 1]
+            let flips = (0..<N).map { _ in coin.randomPick(by: [0.3, 0.7])! }
+            let mean = flips.mean()!
+            XCTAssertEqual(mean, 0.7, accuracy: 1e-1)
         }
     }
     

@@ -12,6 +12,17 @@ class PermutationTests: XCTestCase {
     
     func testRotate() {
         do {
+            var array = [0, 1, 2, 3]
+            array.rotate(n: 1)
+            XCTAssertEqual(array, [1, 2, 3, 0])
+            array.rotate(n: -2)
+            XCTAssertEqual(array, [3, 0, 1, 2])
+            array.rotate(n: 10)
+            XCTAssertEqual(array, [1, 2, 3, 0])
+            array.rotate(n: -10)
+            XCTAssertEqual(array, [3, 0, 1, 2])
+        }
+        do {
             let array = [0, 1, 2, 3]
             XCTAssertEqual(array.rotated(n: -10), [2, 3, 0, 1])
             XCTAssertEqual(array.rotated(n: -1), [3, 0, 1, 2])

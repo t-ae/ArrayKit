@@ -10,17 +10,19 @@ func calcScore(_ i: [Bool]) -> Double {
     return Double(i.filter { $0 }.count) / Double(i.count)
 }
 
-func crossover(_ lhs: [Bool], _ rhs: [Bool]) -> [Bool] {
+func crossover(_ lhs: [Bool], _ rhs: [Bool]) -> ([Bool], [Bool]) {
     assert(lhs.count == rhs.count)
     
     let right = arc4random_uniform(UInt32(lhs.count))
     let left = arc4random_uniform(right)
     
-    var result = lhs
+    var resultL = lhs
+    var resultR = rhs
     for i in Int(left)...Int(right) {
-        result[i] = rhs[i]
+        resultL[i] = rhs[i]
+        resultR[i] = lhs[i]
     }
-    return result
+    return (resultL, resultR)
 }
 
 func describe(_ i: [Bool]) -> String {
@@ -68,16 +70,17 @@ class OneMaxTests: XCTestCase {
             nextGroup.append(group.last!)
             
             // crossover
-            for _ in 1..<N {
+            while nextGroup.count < N {
                 let g1 = group.randomPick(cumulativeWeights: cumulativeOdds)!
                 let g2 = group.randomPick(cumulativeWeights: cumulativeOdds)!
                 
-                let new = crossover(g1, g2)
-                nextGroup.append(new)
+                let (r1, r2) = crossover(g1, g2)
+                nextGroup.append(r1)
+                nextGroup.append(r2)
             }
             
             // mutation
-            for i in 1..<N {
+            for i in 1..<nextGroup.count {
                 if rand() < 0.01 {
                     /// flip if true
                     let mask = [Bool].makeRandomMask(odds: 0.01, count: length)

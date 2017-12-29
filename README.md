@@ -4,10 +4,12 @@
 
 ## Statistic functions
 ```swift
-let array = [0, 1, 2, 3, 4]
+let array = [1, 1, 2, 2, 4]
 array.sum()! // 10
 array.mean()! // 2.0
-array.variance()! // 2.0
+array.variance()! // 1.2
+array.median()! // 2
+array.modes()! // Set([1, 2])
 ```
 
 ## Random pick/shuffle

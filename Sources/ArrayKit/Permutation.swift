@@ -14,20 +14,13 @@ extension Array {
 }
 
 extension Array {
-    /// Performs left rotation.
+    /// Rotates array.
     public mutating func rotate(n: Int) {
-        var n = n % count
-        if n < 0 {
-            n += count
-        }
-        for i in 0..<count-n {
-            let temp = self[i]
-            self[i] = self[i + n]
-            self[i+n] = temp
-        }
+        // TODO: In-place version is better?
+        self = rotated(n: n)
     }
     
-    /// Performs left rotation
+    /// Rotates array.
     public func rotated(n: Int) -> Array {
         var n = n % count
         if n < 0 {

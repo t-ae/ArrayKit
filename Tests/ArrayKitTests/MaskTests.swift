@@ -63,4 +63,18 @@ class MaskTests: XCTestCase {
         
         XCTAssertEqual(mean, odds, accuracy: 1e-1)
     }
+    
+    func testMask() {
+        do {
+            let array = [Int](0..<3)
+            XCTAssertEqual(array.masked(with: [false, false, false]), [])
+            XCTAssertEqual(array.masked(with: [false, false,  true]), [2])
+            XCTAssertEqual(array.masked(with: [false, true,  false]), [1])
+            XCTAssertEqual(array.masked(with: [false, true,   true]), [1, 2])
+            XCTAssertEqual(array.masked(with: [true,  false, false]), [0])
+            XCTAssertEqual(array.masked(with: [true,  false,  true]), [0, 2])
+            XCTAssertEqual(array.masked(with: [true,  true,  false]), [0, 1])
+            XCTAssertEqual(array.masked(with: [true,  true,   true]), [0, 1, 2])
+        }
+    }
 }

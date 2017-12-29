@@ -39,7 +39,7 @@ func XCTAssertEqual<E: Equatable>(_ expression1: [E]?,
         return
     }
     
-    XCTAssertEqual(expression1, expression2)
+    XCTAssertEqual(expression1, expression2, file: file, line: line)
 }
 
 func XCTAssertEqual<E: Equatable>(_ expression1: ArraySlice<E>?,
@@ -56,5 +56,5 @@ func XCTAssertEqual<E: Equatable>(_ expression1: ArraySlice<E>?,
         return
     }
     
-    XCTAssertEqual(expression1, expression2)
+    XCTAssertEqual(expression1, expression2, file: file, line: line)
 }

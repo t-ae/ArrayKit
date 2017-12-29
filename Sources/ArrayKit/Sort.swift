@@ -29,15 +29,6 @@ extension Array where Element: Comparable {
     
     /// Returns stably sorted array.
     public func stableSorted() -> [Element] {
-        let sorted = self.enumerated().sorted {
-            if $0.element < $1.element {
-                return true
-            } else if $1.element < $0.element {
-                return false
-            } else {
-                return $0.offset < $1.offset
-            }
-        }
-        return sorted.map { $0.element }
+        return stableSorted(by: <)
     }
 }

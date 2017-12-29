@@ -19,6 +19,94 @@ class RandomTests: XCTestCase {
             let mean = flips.mean()!
             XCTAssertEqual(mean, 0.7, accuracy: 1e-1)
         }
+        do {
+            let N = 100000
+            let dice = [1, 2, 3, 4, 5, 6]
+            let rolls = (0..<N).map { _ in dice.randomPick(weights: [1, 1, 1, 1, 1, 1])! }
+            let mean = rolls.mean()!
+            XCTAssertEqual(mean, 3.5, accuracy: 1e-1)
+        }
+    }
+    
+    func testRandomPickMulti() {
+        do {
+            // even
+            let N = 100000
+            let events = [1, 2, 3]
+            let pick2 = (0..<N).map { _ in events.randomPick(n: 2)! }
+            
+            // all elements are distinct
+            XCTAssertFalse(pick2.contains { $0[0] == $0[1] })
+            
+            var bag = [Int: Int]()
+            bag.reserveCapacity(6)
+            for e in pick2 {
+                let k = e[0]*5 + e[1]
+                if bag[k] == nil {
+                    bag[k] = 1
+                } else {
+                    bag[k]! += 1
+                }
+            }
+            
+            // all pairs are picked almost same probabilities
+            let probs = bag.map { Double($0.value) / Double(N) }
+            for p in probs {
+                XCTAssertEqual(p, 1/Double(6), accuracy: 1e-2)
+            }
+        }
+        do {
+            // odds
+            let N = 100000
+            let events = [1, 2, 3]
+            let pick2 = (0..<N).map { _ in events.randomPick(n: 2, by: [0.333, 0.333, 0.333])! }
+            
+            // all elements are distinct
+            XCTAssertFalse(pick2.contains { $0[0] == $0[1] })
+            
+            var bag = [Int: Int]()
+            bag.reserveCapacity(3)
+            for e in pick2 {
+                let k = e[0]*5 + e[1]
+                if bag[k] == nil {
+                    bag[k] = 1
+                } else {
+                    bag[k]! += 1
+                }
+            }
+            
+            // all pairs are picked almost same probabilities
+            let probs = bag.map { Double($0.value) / Double(N) }
+            for p in probs {
+                XCTAssertEqual(p, 1/Double(6), accuracy: 1e-2)
+            }
+        }
+        do {
+            // weights
+            let N = 100000
+            let events = [1, 2, 3]
+            let pick2 = (0..<N).map { _ in events.randomPick(n: 2, weights: [1, 1, 1])! }
+            
+            // all elements are distinct
+            XCTAssertFalse(pick2.contains { $0[0] == $0[1] })
+            
+            var bag = [Int: Int]()
+            bag.reserveCapacity(3)
+            for e in pick2 {
+                let k = e[0]*5 + e[1]
+                if bag[k] == nil {
+                    bag[k] = 1
+                } else {
+                    bag[k]! += 1
+                }
+            }
+            
+            // all pairs are picked almost same probabilities
+            let probs = bag.map { Double($0.value) / Double(N) }
+            for p in probs {
+                XCTAssertEqual(p, 1/Double(6), accuracy: 1e-2)
+            }
+        }
     }
     
     func testShuffle() {

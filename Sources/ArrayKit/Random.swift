@@ -81,6 +81,7 @@ extension Array {
     ///   - weights: The weights associated with each element.
     public func randomPick(weights: [Int]) -> Element? {
         precondition(weights.count == count, "`weights` size must match with array size.")
+        precondition(weights.all { $0 >= 0 }, "All elements of `weights` mus be positive.")
         
         guard count > 0 else {
             return nil
@@ -96,6 +97,97 @@ extension Array {
             }
         }
         preconditionFailure("No elements picked.")
+    }
+    
+    /// Picks distinct `n` elements.
+    /// - Parameters:
+    ///   - n: Number of elements to pick.
+    ///   - odds: The probabilities associated with each element.
+    public func randomPick(n: Int) -> [Element]? {
+        precondition(n >= 0, "`n` must be positive.")
+        guard n <= count else {
+            return nil
+        }
+        guard n < count else {
+            return self
+        }
+        
+        var result = [Element]()
+        result.reserveCapacity(n)
+        
+        var rest = self
+        for _ in 0..<n {
+            let i = randint(rest.count)
+            let e = rest.remove(at: i)
+            result.append(e)
+        }
+        
+        return result
+    }
+    
+    /// Picks distinct `n` elements.
+    /// - Parameters:
+    ///   - n: Number of elements to pick.
+    ///   - odds: The probabilities associated with each element.
+    public func randomPick(n: Int, by odds: [Double]) -> [Element]? {
+        precondition(odds.count == count, "`odds` size must match with array size.")
+        precondition(n >= 0, "`n` must be positive.")
+        guard n <= count else {
+            return nil
+        }
+        guard n < count else {
+            return self
+        }
+        
+        var odds = odds
+        var rest = self
+        var result = [Element]()
+        result.reserveCapacity(n)
+        for _ in 0..<n {
+            let cumulativeOdds = odds.scan(0, +)
+            let r = randUniform() * cumulativeOdds.last!
+            let i = cumulativeOdds.index { r <= $0 }!
+            odds.remove(at: i)
+            let e = rest.remove(at: i)
+            result.append(e)
+        }
+        return result
+    }
+    
+    /// Picks distinct `n` elements.
+    /// - Parameters:
+    ///   - n: Number of elements to pick.
+    ///   - weights: The probabilities associated with each element.
+    public func randomPick(n: Int, weights: [Int]) -> [Element]? {
+        precondition(weights.count == count, "`weights` size must match with array size.")
+        precondition(weights.all { $0 >= 0 }, "All elements of `weights` mus be positive.")
+        precondition(n >= 0, "`n` must be positive.")
+        guard n <= count else {
+            return nil
+        }
+        guard n < count else {
+            return self
+        }
+        
+        var weights = weights
+        var rest = self
+        var result = [Element]()
+        result.reserveCapacity(n)
+        for _ in 0..<n {
+            let r = randint(weights.sum()!)
+            
+            var acc = 0
+            for i in 0..<weights.count {
+                acc += weights[i]
+                if r < acc {
+                    weights.remove(at: i)
+                    let e = rest.remove(at: i)
+                    result.append(e)
+                    break
+                }
+            }
+        }
+        return result
     }
 }
 

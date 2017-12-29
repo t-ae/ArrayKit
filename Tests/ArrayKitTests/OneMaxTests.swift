@@ -62,7 +62,6 @@ class OneMaxTests: XCTestCase {
             group.permute(by: order)
             scores.permute(by: order)
             let odds = scores.map { $0 / sumScores }
-            let cumulativeOdds = odds.scan(0, +)
             
             var nextGroup = [Individual]()
             
@@ -71,10 +70,9 @@ class OneMaxTests: XCTestCase {
             
             // crossover
             while nextGroup.count < N {
-                let g1 = group.randomPick(cumulativeWeights: cumulativeOdds)!
-                let g2 = group.randomPick(cumulativeWeights: cumulativeOdds)!
+                let p = group.randomPick(n: 2, by: odds)!
                 
-                let (r1, r2) = crossover(g1, g2)
+                let (r1, r2) = crossover(p[0], p[1])
                 nextGroup.append(r1)
                 nextGroup.append(r2)
             }

@@ -50,7 +50,7 @@ class OneMaxTests: XCTestCase {
             
             var scores = group.map(calcScore)
             let sumScores = scores.sum()!
-            let meanScores = sumScores / Double(N)
+            let meanScores = sumScores / Double(group.count)
             let maxScore = scores.max()!
             print("mean: \(meanScores) max: \(maxScore)")
             
@@ -95,7 +95,6 @@ class OneMaxTests: XCTestCase {
         let index = scores.index(of: scores.max()!)!
         let answer = group[index]
         print("answer: \(describe(answer))")
-        
     }
 }
 #endif

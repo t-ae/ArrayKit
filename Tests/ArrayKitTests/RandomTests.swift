@@ -109,6 +109,53 @@ class RandomTests: XCTestCase {
         }
     }
     
+    func testRandomSlice() {
+        do {
+            // excludes empty
+            let array = [3, 4, 5, 6]
+            
+            let N = 100000
+            var bag = [Int: Int]()
+            
+            for _ in 0..<N {
+                let slice = array.randomSlice()
+                let key = slice.startIndex * 13 + slice.endIndex
+                if bag[key] == nil {
+                    bag[key] = 1
+                } else {
+                    bag[key]! += 1
+                }
+            }
+            // all pairs are picked almost same probabilities
+            let probs = bag.map { Double($0.value) / Double(N) }
+            for p in probs {
+                XCTAssertEqual(p, 1/Double(10), accuracy: 1e-2)
+            }
+        }
+        do {
+            // includes empty
+            let array = [3, 4, 5, 6]
+            
+            let N = 100000
+            var bag = [Int: Int]()
+            
+            for _ in 0..<N {
+                let slice = array.randomSlice(includesEmpty: true)
+                let key = slice.startIndex * 13 + slice.endIndex
+                if bag[key] == nil {
+                    bag[key] = 1
+                } else {
+                    bag[key]! += 1
+                }
+            }
+            // all pairs are picked almost same probabilities
+            let probs = bag.map { Double($0.value) / Double(N) }
+            for p in probs {
+                XCTAssertEqual(p, 1/Double(11), accuracy: 1e-2)
+            }
+        }
+    }
+    
     func testShuffle() {
         do {
             let array = Array(0..<64)

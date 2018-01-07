@@ -189,6 +189,33 @@ extension Array {
         }
         return result
     }
+    
+    /// Generate slice randomly with even odds.
+    /// - Parameters:
+    ///   - includesEmpty: If true, generated slice can be empty.
+    public func randomSlice(includesEmpty: Bool = false) -> ArraySlice<Element> {
+        
+        var number: Int
+        if includesEmpty {
+            number = randint(count*(1+count)/2 + 1) - 1
+        } else {
+            number = randint(count*(1+count)/2)
+        }
+        
+        guard number >= 0 else {
+            return ArraySlice()
+        }
+        
+        var index = 0
+        while true {
+            if number < count - index {
+                return self[index...index + number]
+            }
+            number -= count - index
+            index += 1
+        }
+        preconditionFailure()
+    }
 }
 
 extension Array {

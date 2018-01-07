@@ -194,7 +194,13 @@ extension Array {
     /// - Parameters:
     ///   - includesEmpty: If true, generated slice can be empty.
     public func randomSlice(includesEmpty: Bool = false) -> ArraySlice<Element> {
-        
+        return self[randomRange(includesEmpty: includesEmpty)]
+    }
+    
+    /// Generate random range in array.
+    /// - Parameters:
+    ///   - includesEmpty: If true, generated range can be empty.
+    public func randomRange(includesEmpty: Bool = false) -> CountableRange<Int> {
         var number: Int
         if includesEmpty {
             number = randint(count*(1+count)/2 + 1) - 1
@@ -203,13 +209,13 @@ extension Array {
         }
         
         guard number >= 0 else {
-            return ArraySlice()
+            return 0..<0
         }
         
         var index = 0
         while true {
             if number < count - index {
-                return self[index...index + number]
+                return index..<index + number + 1
             }
             number -= count - index
             index += 1

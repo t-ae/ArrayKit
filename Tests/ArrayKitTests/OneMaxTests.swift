@@ -3,7 +3,7 @@ import XCTest
 import ArrayKit
 
 func rand() -> Double {
-    return Double(arc4random()) / Double(UInt32.max)
+    return Double(arc4random_uniform(UInt32.max)) / Double(UInt32.max)
 }
 
 func calcScore(_ i: [Bool]) -> Double {

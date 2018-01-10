@@ -2,9 +2,9 @@
 import Foundation
 
 // MARK: - Utilities
-var xorshift_state_x = UInt64(arc4random()) << 32 | UInt64(arc4random())
-var xorshift_state_y = UInt64(arc4random()) << 32 | UInt64(arc4random())
-var xorshift_state_z = UInt64(arc4random()) << 32 | UInt64(arc4random())
+var xorshift_state_x = UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
+var xorshift_state_y = UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
+var xorshift_state_z = UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
 var xorshift_state_t: UInt64 = 0
 func xorshift64bit() -> UInt64 {
     xorshift_state_t = (xorshift_state_x ^ (xorshift_state_x << 3))

@@ -14,12 +14,12 @@ extension Array {
 }
 
 extension Array {
-    /// Rotates array.
+    /// Left rotates `n` times.
     public mutating func rotate(n: Int) {
         self = rotated(n: n)
     }
     
-    /// Rotates array.
+    /// Returns the array left rotated `n` times.
     public func rotated(n: Int) -> Array {
         var n = n % count
         if n < 0 {

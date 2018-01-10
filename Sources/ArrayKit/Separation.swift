@@ -4,7 +4,7 @@ extension Array {
     /// If `count < sections`, return array contains `count` single element slices.
     /// - Parameters:
     ///   - sections: Number of sections the array will be splited into.
-    ///   - omittingEmptySlices: If `true`, return array won't contain empty slices.
+    ///   - omittingEmptySlices: If `true`, return array won't contain empty slices. Default is `true`.
     public func split(_ sections: Int, omittingEmptySlices: Bool = true) -> [ArraySlice<Element>] {
         guard count >= sections else {
             if omittingEmptySlices {

@@ -39,7 +39,7 @@ extension Array {
     
     /// Picks one element.
     /// - Parameter odds: The probabilities associated with each element.
-    /// - Warning: Small odds may cause computation error. Use `randomPick(cumulativeOdds:)` or `randomPick(weights:)` instead.
+    /// - Warning: Small odds can cause computation error. Use `randomPick(cumulativeWeights:)` or `randomPick(weights:)` instead.
     public func randomPick(by odds: [Double]) -> Element? {
         precondition(odds.count == count, "`odds` size must match with array size.")
         
@@ -192,14 +192,14 @@ extension Array {
     
     /// Generate slice randomly with even odds.
     /// - Parameters:
-    ///   - includesEmpty: If true, generated slice can be empty.
+    ///   - includesEmpty: If true, generated slice can be empty. Default is `false`.
     public func randomSlice(includesEmpty: Bool = false) -> ArraySlice<Element> {
         return self[randomRange(includesEmpty: includesEmpty)]
     }
     
     /// Generate random range in array.
     /// - Parameters:
-    ///   - includesEmpty: If true, generated range can be empty.
+    ///   - includesEmpty: If true, generated range can be empty. Default is `false`.
     public func randomRange(includesEmpty: Bool = false) -> CountableRange<Int> {
         var number: Int
         if includesEmpty {

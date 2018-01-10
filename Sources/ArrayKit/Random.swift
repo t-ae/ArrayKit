@@ -2,18 +2,21 @@
 import Foundation
 
 // MARK: - Utilities
-var xorshift_state_x = UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
-var xorshift_state_y = UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
-var xorshift_state_z = UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
-var xorshift_state_t: UInt64 = 0
+
+// Xorshift+
+// https://en.wikipedia.org/wiki/Xorshift#xorshift+
+var xorshift_s = [
+    UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max)),
+    UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
+]
 func xorshift64bit() -> UInt64 {
-    xorshift_state_t = (xorshift_state_x ^ (xorshift_state_x << 3))
-        ^ (xorshift_state_y ^ (xorshift_state_y >> 19))
-        ^ (xorshift_state_z ^ (xorshift_state_z << 6))
-    xorshift_state_x = xorshift_state_y
-    xorshift_state_y = xorshift_state_z
-    xorshift_state_z = xorshift_state_t
-    return xorshift_state_t
+    var x = xorshift_s[0]
+    let y = xorshift_s[1]
+    
+    xorshift_s[0] = y
+    x ^= x << 23
+    xorshift_s[1] = x ^ y ^ (x >> 17) ^ (y >> 26)
+    return xorshift_s[1] &+ y
 }
 
 /// Generates random Double value from [0, 1].
@@ -21,8 +24,7 @@ func randUniform() -> Double {
     return Double(xorshift64bit()) / Double(UInt64.max)
 }
 
-/// Generates random Int value.
-/// Excludes `upperBound`.
+/// Generates random Int value from [0, upperBound).
 func randint(_ upperBound: Int) -> Int {
     return Int(xorshift64bit() % UInt64(upperBound))
 }

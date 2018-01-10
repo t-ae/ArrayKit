@@ -13,6 +13,10 @@ class StatisticsTests: XCTestCase {
             let array = [Int]()
             XCTAssertNil(array.median())
         }
+        do {
+            let array = [1]
+            XCTAssertEqual(array.median(), 1)
+        }
     }
     
     func testModes() {
@@ -27,6 +31,10 @@ class StatisticsTests: XCTestCase {
         do {
             let array: [Int] = []
             XCTAssertEqual(array.modes(), [])
+        }
+        do {
+            let array = [1]
+            XCTAssertEqual(array.modes(), [1])
         }
     }
     
@@ -64,6 +72,23 @@ class StatisticsTests: XCTestCase {
             let array: [Float80] = []
             XCTAssertNil(array.sum())
         }
+        
+        do {
+            let array: [Int] = [1]
+            XCTAssertEqual(array.sum(), 1)
+        }
+        do {
+            let array: [Float] = [1]
+            XCTAssertEqual(array.sum(), 1)
+        }
+        do {
+            let array: [Double] = [1]
+            XCTAssertEqual(array.sum(), 1)
+        }
+        do {
+            let array: [Float80] = [1]
+            XCTAssertEqual(array.sum(), 1)
+        }
     }
     
     func testMean() {
@@ -92,6 +117,23 @@ class StatisticsTests: XCTestCase {
             let array: [Double] = []
             XCTAssertNil(array.mean())
         }
+        
+        do {
+            let array: [Int] = [1]
+            XCTAssertEqual(array.mean(), 1)
+        }
+        do {
+            let array: [Float] = [1]
+            XCTAssertEqual(array.mean(), 1)
+        }
+        do {
+            let array: [Double] = [1]
+            XCTAssertEqual(array.mean(), 1)
+        }
+        do {
+            let array: [Float80] = [1]
+            XCTAssertEqual(array.mean(), 1)
+        }
     }
     
     func testVariance() {
@@ -119,6 +161,23 @@ class StatisticsTests: XCTestCase {
         do {
             let array: [Double] = []
             XCTAssertNil(array.variance())
+        }
+        
+        do {
+            let array: [Int] = [1]
+            XCTAssertEqual(array.variance(), 0)
+        }
+        do {
+            let array: [Float] = [1]
+            XCTAssertEqual(array.variance(), 0)
+        }
+        do {
+            let array: [Double] = [1]
+            XCTAssertEqual(array.variance(), 0)
+        }
+        do {
+            let array: [Float80] = [1]
+            XCTAssertEqual(array.variance(), 0)
         }
     }
     
@@ -153,6 +212,25 @@ class StatisticsTests: XCTestCase {
         do {
             let array: [Double] = []
             XCTAssertNil(array.moments())
+        }
+        
+        do {
+            let array: [Int] = [1]
+            let (mean, variance) = array.moments()!
+            XCTAssertEqual(mean, 1)
+            XCTAssertEqual(variance, 0)
+        }
+        do {
+            let array: [Float] = [1]
+            let (mean, variance) = array.moments()!
+            XCTAssertEqual(mean, 1)
+            XCTAssertEqual(variance, 0)
+        }
+        do {
+            let array: [Double] = [1]
+            let (mean, variance) = array.moments()!
+            XCTAssertEqual(mean, 1)
+            XCTAssertEqual(variance, 0)
         }
     }
     

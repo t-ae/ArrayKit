@@ -1,6 +1,7 @@
 
 import Foundation
 
+// MARK: - Utilities
 var xorshift_state_x = UInt64(arc4random()) << 32 | UInt64(arc4random())
 var xorshift_state_y = UInt64(arc4random()) << 32 | UInt64(arc4random())
 var xorshift_state_z = UInt64(arc4random()) << 32 | UInt64(arc4random())
@@ -26,6 +27,7 @@ func randint(_ upperBound: Int) -> Int {
     return Int(xorshift64bit() % UInt64(upperBound))
 }
 
+// MARK: - Pick single element
 extension Array {
     
     /// Picks one element with even odds.
@@ -98,7 +100,10 @@ extension Array {
         }
         preconditionFailure("No elements picked.")
     }
-    
+}
+
+// MARK: - Pick multiple elements
+extension Array {
     /// Picks distinct `n` elements.
     /// - Parameters:
     ///   - n: Number of elements to pick.
@@ -189,7 +194,10 @@ extension Array {
         }
         return result
     }
-    
+}
+
+// MARK: - Generate range or slice
+extension Array {
     /// Generate slice randomly with even odds.
     /// - Parameters:
     ///   - includesEmpty: If true, generated slice can be empty. Default is `false`.
@@ -224,6 +232,7 @@ extension Array {
     }
 }
 
+// MARK: - Shuffle
 extension Array {
     /// Shuffles array.
     public mutating func shuffle() {

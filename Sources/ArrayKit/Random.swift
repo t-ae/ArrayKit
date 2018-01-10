@@ -236,9 +236,11 @@ extension Array {
 extension Array {
     /// Shuffles array.
     public mutating func shuffle() {
-        precondition(count <= UInt32.max, "Humongous arrays are not supported.")
+        guard count > 0 else {
+            return
+        }
         
-        for i in (0..<count).reversed() {
+        for i in (1..<count).reversed() {
             let r = randint(i+1)
             let temp = self[i]
             self[i] = self[r]

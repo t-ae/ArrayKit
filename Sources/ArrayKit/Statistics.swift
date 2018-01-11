@@ -11,6 +11,9 @@ extension Array where Element: Numeric {
 
 extension Array where Element: Comparable {
     /// Returns median of elements.
+    ///
+    /// This method doesn't consider exceptional values(like FloatingPoint.nan).
+    /// Remove them before use this method.
     public func median() -> Element? {
         guard count > 0 else {
             return nil

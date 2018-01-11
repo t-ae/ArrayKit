@@ -1,6 +1,9 @@
 
 extension Array where Element: Comparable {    
     /// Returns k-th smallest element.
+    ///
+    /// This method doesn't consider exceptional values(like FloatingPoint.nan).
+    /// Remove them before use this method.
     public func quickSelect(k: Int) -> Element {
         precondition(k < count, "Index out of ramge.")
         var array = self

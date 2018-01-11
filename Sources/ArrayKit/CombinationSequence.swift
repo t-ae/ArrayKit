@@ -1,5 +1,5 @@
 
-public struct CombinaionSequence<Element>: Sequence {
+public struct CombinationSequence<Element>: Sequence {
     let array: [Element]
     let k: Int
     
@@ -61,7 +61,7 @@ public struct CombinationIterator<SetElement>: IteratorProtocol {
 
 extension Array {
     /// Sequence of all combinations of `k` elements.
-    public func combinations(k: Int) -> CombinaionSequence<Element> {
-        return CombinaionSequence(array: self, k: k)
+    public func combinations(k: Int) -> CombinationSequence<Element> {
+        return CombinationSequence(array: self, k: k)
     }
 }

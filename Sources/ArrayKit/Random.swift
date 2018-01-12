@@ -96,6 +96,9 @@ extension Array {
 // MARK: - Pick multiple elements
 extension Array {
     /// Picks distinct `n` elements.
+    ///
+    /// The order of result is not stable.
+    ///
     /// - Parameters:
     ///   - n: Number of elements to pick.
     ///   - odds: The probabilities associated with each element.
@@ -120,7 +123,7 @@ extension Array {
     
     /// Picks distinct `n` elements.
     ///
-    /// The order of result is not stable.
+    /// The order of result is not stable, and elements with high odds tend to appear earlier in result.
     ///
     /// - Parameters:
     ///   - n: Number of elements to pick.

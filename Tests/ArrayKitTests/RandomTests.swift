@@ -32,6 +32,20 @@ class RandomTests: XCTestCase {
         }
     }
     
+    func testRandomPick_cumulativeWeights() {
+        do {
+            let N = 100000
+            let coin = [0, 1]
+            let flips = (0..<N).map { _ in coin.randomPick(cumulativeWeights: [0.3, 1.0])! }
+            let mean = flips.mean()!
+            XCTAssertEqual(mean, 0.7, accuracy: 1e-1)
+        }
+        do {
+            let events: [Int] = []
+            XCTAssertNil(events.randomPick(cumulativeWeights: []))
+        }
+    }
+    
     func testRandomPick_weights() {
         do {
             let N = 100000

@@ -62,7 +62,6 @@ class RandomTests: XCTestCase {
     
     func testRandomPick_n_even() {
         do {
-            // even
             let N = 100000
             let events = [1, 2, 3]
             let pick2 = (0..<N).map { _ in events.randomPick(n: 2)! }
@@ -91,6 +90,11 @@ class RandomTests: XCTestCase {
             let events = [1, 2, 3]
             let pick = events.randomPick(n: 3)!
             XCTAssertEqual(Set(pick), Set(events))
+        }
+        do {
+            let events = [0, 1, 2]
+            XCTAssertEqual(events.randomPick(n: 0), [])
+            XCTAssertNil(events.randomPick(n: 4))
         }
     }
     
@@ -125,6 +129,12 @@ class RandomTests: XCTestCase {
             let pick = events.randomPick(n: 3, by: [0.1, 0.2, 0.3])!
             XCTAssertEqual(Set(pick), Set(events))
         }
+        do {
+            let events = [0, 1, 2]
+            XCTAssertEqual(events.randomPick(n: 0, by: [0, 0.1, 0.2]), [])
+            XCTAssertEqual(events.randomPick(n: 2, by: [0, 0.1, 0.2]).map { Set($0) }, [1, 2])
+            XCTAssertNil(events.randomPick(n: 4, by: [0, 0.1, 0.2]))
+        }
     }
     
     func testRandomPick_n_weights() {
@@ -157,6 +167,12 @@ class RandomTests: XCTestCase {
             let events = [1, 2, 3]
             let pick = events.randomPick(n: 3, weights: [1, 1, 1])!
             XCTAssertEqual(Set(pick), Set(events))
+        }
+        do {
+            let events = [0, 1, 2]
+            XCTAssertEqual(events.randomPick(n: 0, weights: [0, 1, 2]), [])
+            XCTAssertEqual(events.randomPick(n: 2, weights: [0, 1, 2]).map { Set($0) }, [1, 2])
+            XCTAssertNil(events.randomPick(n: 4, weights: [0, 1, 2]))
         }
     }
     

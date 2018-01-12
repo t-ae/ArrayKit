@@ -45,22 +45,7 @@ extension Array {
     /// - Parameter odds: The probabilities associated with each element.
     /// - Warning: Small odds can cause computation error. Use `randomPick(cumulativeWeights:)` or `randomPick(weights:)` instead.
     public func randomPick(by odds: [Double]) -> Element? {
-        precondition(odds.count == count, "`odds` size must match with array size.")
-        
-        guard count > 0 else {
-            return nil
-        }
-        
-        let r = randUniform()
-        
-        var acc: Double = 0
-        for i in 0..<odds.count {
-            acc += odds[i]
-            if acc >= r {
-                return self[i]
-            }
-        }
-        fatalError("No elements picked. Maybe sum of `odds`(\(acc)) < 1.")
+        return randomPick(cumulativeWeights: odds.scan(0, +))
     }
     
     /// Picks one element.
@@ -70,6 +55,7 @@ extension Array {
         precondition(cumulativeWeights.count == count, "`cumulativeWeights` size must match with array size.")
         precondition(zip(cumulativeWeights, cumulativeWeights.dropFirst()).all { $0 <= $1 },
                      "`cumulativeWeights` is not ascending.")
+        precondition(cumulativeWeights.first! >= 0, "`cumulativeWeights` must start with positive value.")
         
         guard count > 0 else {
             return nil
@@ -85,7 +71,8 @@ extension Array {
     ///   - weights: The weights associated with each element.
     public func randomPick(weights: [Int]) -> Element? {
         precondition(weights.count == count, "`weights` size must match with array size.")
-        precondition(weights.all { $0 >= 0 }, "All elements of `weights` mus be positive.")
+        precondition(weights.all { $0 >= 0 }, "All `weights` must be positive.")
+        precondition(weights.some { $0 > 0 }, "Can't pick because all `weights` are 0.")
         
         guard count > 0 else {
             return nil
@@ -100,7 +87,7 @@ extension Array {
                 return self[i]
             }
         }
-        preconditionFailure("No elements picked.")
+        fatalError("No elements picked.")
     }
 }
 
@@ -114,9 +101,6 @@ extension Array {
         precondition(n >= 0, "`n` must be positive.")
         guard n <= count else {
             return nil
-        }
-        guard n < count else {
-            return self
         }
         
         var result = [Element]()
@@ -133,17 +117,18 @@ extension Array {
     }
     
     /// Picks distinct `n` elements.
+    ///
+    /// The order of result is not stable.
+    ///
     /// - Parameters:
     ///   - n: Number of elements to pick.
     ///   - odds: The probabilities associated with each element.
     public func randomPick(n: Int, by odds: [Double]) -> [Element]? {
         precondition(odds.count == count, "`odds` size must match with array size.")
         precondition(n >= 0, "`n` must be positive.")
+        
         guard n <= count else {
             return nil
-        }
-        guard n < count else {
-            return self
         }
         
         var odds = odds
@@ -162,18 +147,19 @@ extension Array {
     }
     
     /// Picks distinct `n` elements.
+    ///
+    /// The order of result is not stable, and large weight elements tend to appear earlier in result.
+    ///
     /// - Parameters:
     ///   - n: Number of elements to pick.
     ///   - weights: The probabilities associated with each element.
     public func randomPick(n: Int, weights: [Int]) -> [Element]? {
+        precondition(n >= 0, "`n` must be positive.")
         precondition(weights.count == count, "`weights` size must match with array size.")
         precondition(weights.all { $0 >= 0 }, "All elements of `weights` mus be positive.")
-        precondition(n >= 0, "`n` must be positive.")
+        
         guard n <= count else {
             return nil
-        }
-        guard n < count else {
-            return self
         }
         
         var weights = weights
@@ -181,7 +167,9 @@ extension Array {
         var result = [Element]()
         result.reserveCapacity(n)
         for _ in 0..<n {
-            let r = randint(weights.sum()!)
+            let weightsSum = weights.sum()!
+            precondition(weightsSum > 0, "Less than `n` elements have non zero weights.")
+            let r = randint(weightsSum)
             
             var acc = 0
             for i in 0..<weights.count {

@@ -4,7 +4,7 @@ import ArrayKit
 
 class RandomTests: XCTestCase {
     
-    func testRandomPick() {
+    func testRandomPick_even() {
         do {
             let N = 100000
             let dice = [1, 2, 3, 4, 5, 6]
@@ -12,6 +12,9 @@ class RandomTests: XCTestCase {
             let mean = rolls.mean()!
             XCTAssertEqual(mean, 3.5, accuracy: 1e-1)
         }
+    }
+    
+    func testRandomPick_odds() {
         do {
             let N = 100000
             let coin = [0, 1]
@@ -19,6 +22,9 @@ class RandomTests: XCTestCase {
             let mean = flips.mean()!
             XCTAssertEqual(mean, 0.7, accuracy: 1e-1)
         }
+    }
+    
+    func testRandomPick_weights() {
         do {
             let N = 100000
             let dice = [1, 2, 3, 4, 5, 6]
@@ -28,7 +34,7 @@ class RandomTests: XCTestCase {
         }
     }
     
-    func testRandomPickMulti() {
+    func testRandomPick_n_even() {
         do {
             // even
             let N = 100000
@@ -56,7 +62,14 @@ class RandomTests: XCTestCase {
             }
         }
         do {
-            // odds
+            let events = [1, 2, 3]
+            let pick = events.randomPick(n: 3)!
+            XCTAssertEqual(Set(pick), Set(events))
+        }
+    }
+    
+    func testRandomPick_n_odds() {
+        do {
             let N = 100000
             let events = [1, 2, 3]
             let pick2 = (0..<N).map { _ in events.randomPick(n: 2, by: [0.333, 0.333, 0.333])! }
@@ -82,7 +95,14 @@ class RandomTests: XCTestCase {
             }
         }
         do {
-            // weights
+            let events = [1, 2, 3]
+            let pick = events.randomPick(n: 3, by: [0.1, 0.2, 0.3])!
+            XCTAssertEqual(Set(pick), Set(events))
+        }
+    }
+    
+    func testRandomPick_n_weights() {
+        do {
             let N = 100000
             let events = [1, 2, 3]
             let pick2 = (0..<N).map { _ in events.randomPick(n: 2, weights: [1, 1, 1])! }
@@ -106,6 +126,11 @@ class RandomTests: XCTestCase {
             for p in probs {
                 XCTAssertEqual(p, 1/Double(6), accuracy: 1e-2)
             }
+        }
+        do {
+            let events = [1, 2, 3]
+            let pick = events.randomPick(n: 3, weights: [1, 1, 1])!
+            XCTAssertEqual(Set(pick), Set(events))
         }
     }
     

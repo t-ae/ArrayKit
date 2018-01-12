@@ -1,14 +1,5 @@
 
-public struct SubSequenceSequence<Element>: Sequence {
-    let array: [Element]
-    let length: CountableRange<Int>
-    
-    public func makeIterator() -> SubSequenceIterator<Element> {
-        return SubSequenceIterator(array: array, length: length)
-    }
-}
-
-public struct SubSequenceIterator<SequenceElement>: IteratorProtocol {
+public struct SubSequenceIterator<SequenceElement>: Sequence, IteratorProtocol {
     let array: [SequenceElement]
     var lengthIterator: IndexingIterator<CountableRange<Int>>
     
@@ -42,12 +33,12 @@ public struct SubSequenceIterator<SequenceElement>: IteratorProtocol {
 
 extension Array {
     /// Sequence of all sub sequences.
-    public func subSequences() -> SubSequenceSequence<Element> {
-        return SubSequenceSequence(array: self, length: 0..<self.count+1)
+    public func subSequences() -> SubSequenceIterator<Element> {
+        return .init(array: self, length: 0..<self.count+1)
     }
     
     /// Sequence of all sub sequences of specified `length`.
-    public func subSequences(of length: Int) -> SubSequenceSequence<Element> {
-        return SubSequenceSequence(array: self, length: length..<length+1)
+    public func subSequences(of length: Int) -> SubSequenceIterator<Element> {
+        return .init(array: self, length: length..<length+1)
     }
 }

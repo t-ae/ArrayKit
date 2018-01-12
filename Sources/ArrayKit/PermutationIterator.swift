@@ -1,14 +1,5 @@
 
-public struct CombinationSequence<Element>: Sequence {
-    let array: [Element]
-    let k: Int
-    
-    public func makeIterator() -> CombinationIterator<Element> {
-        return CombinationIterator(array: array, k: k)
-    }
-}
-
-public struct CombinationIterator<SetElement>: IteratorProtocol {
+public struct PermutationIterator<SetElement>: Sequence, IteratorProtocol {
     let array: [SetElement]
     let k: Int
     
@@ -33,17 +24,22 @@ public struct CombinationIterator<SetElement>: IteratorProtocol {
                 return nil
             }
             indices[i] += 1
-            if indices[i] >= array.count - k + i + 1 {
-                guard let p = increment(i-1) else {
+            if indices[i] >= array.count {
+                guard let _ = increment(i-1) else {
                     return nil
                 }
-                indices[i] = p+1
+                indices[i] = 0
             }
             return indices[i]
         }
-        guard increment(k-1) != nil else {
-            return nil
-        }
+        
+        // skip while `indices` contains duplications.
+        repeat {
+            guard increment(k-1) != nil else {
+                return nil
+            }
+        } while Set(indices).count != indices.count
+        
         return indices
     }
     
@@ -60,8 +56,13 @@ public struct CombinationIterator<SetElement>: IteratorProtocol {
 }
 
 extension Array {
-    /// Sequence of all combinations of `k` elements.
-    public func combinations(k: Int) -> CombinationSequence<Element> {
-        return CombinationSequence(array: self, k: k)
+    /// Sequence of all permutations of elements.
+    public func permutations() -> PermutationIterator<Element> {
+        return .init(array: self, k: self.count)
+    }
+    
+    /// Sequence of all permutations of `k` elements.
+    public func permutations(k: Int) -> PermutationIterator<Element> {
+        return .init(array: self, k: k)
     }
 }

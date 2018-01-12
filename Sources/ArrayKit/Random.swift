@@ -55,11 +55,12 @@ extension Array {
         precondition(cumulativeWeights.count == count, "`cumulativeWeights` size must match with array size.")
         precondition(zip(cumulativeWeights, cumulativeWeights.dropFirst()).all { $0 <= $1 },
                      "`cumulativeWeights` is not ascending.")
-        precondition(cumulativeWeights.first! >= 0, "`cumulativeWeights` must start with positive value.")
         
         guard count > 0 else {
             return nil
         }
+        
+        precondition(cumulativeWeights.first! >= 0, "`cumulativeWeights` must start with positive value.")
         
         let r = randUniform() * cumulativeWeights.last!
         let index = cumulativeWeights.index { $0 > r }!
@@ -72,11 +73,12 @@ extension Array {
     public func randomPick(weights: [Int]) -> Element? {
         precondition(weights.count == count, "`weights` size must match with array size.")
         precondition(weights.all { $0 >= 0 }, "All `weights` must be positive.")
-        precondition(weights.some { $0 > 0 }, "Can't pick because all `weights` are 0.")
         
         guard count > 0 else {
             return nil
         }
+        
+        precondition(weights.some { $0 > 0 }, "Can't pick because all `weights` are 0.")
         
         let weightSum = weights.sum()!
         let r = randint(weightSum)

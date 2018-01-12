@@ -12,6 +12,10 @@ class RandomTests: XCTestCase {
             let mean = rolls.mean()!
             XCTAssertEqual(mean, 3.5, accuracy: 1e-1)
         }
+        do {
+            let events: [Int] = []
+            XCTAssertNil(events.randomPick())
+        }
     }
     
     func testRandomPick_odds() {
@@ -22,6 +26,10 @@ class RandomTests: XCTestCase {
             let mean = flips.mean()!
             XCTAssertEqual(mean, 0.7, accuracy: 1e-1)
         }
+        do {
+            let events: [Int] = []
+            XCTAssertNil(events.randomPick(by: []))
+        }
     }
     
     func testRandomPick_weights() {
@@ -31,6 +39,10 @@ class RandomTests: XCTestCase {
             let rolls = (0..<N).map { _ in dice.randomPick(weights: [1, 1, 1, 1, 1, 1])! }
             let mean = rolls.mean()!
             XCTAssertEqual(mean, 3.5, accuracy: 1e-1)
+        }
+        do {
+            let events: [Int] = []
+            XCTAssertNil(events.randomPick(weights: []))
         }
     }
     

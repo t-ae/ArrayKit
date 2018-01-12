@@ -18,16 +18,16 @@ public struct SubSequenceIterator<SequenceElement>: Sequence, IteratorProtocol {
             return nil
         }
         
-        let slice = array[index..<index+length]
-        
-        self.index += 1
-        
-        if length == 0 || index + length > array.count {
-            self.length = lengthIterator.next()
-            index = 0
+        defer {
+            self.index += 1
+            
+            if length == 0 || index + length > array.count {
+                self.length = lengthIterator.next()
+                index = 0
+            }
         }
         
-        return slice
+        return array[index..<index+length]
     }
 }
 

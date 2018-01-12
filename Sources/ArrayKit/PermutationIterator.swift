@@ -47,11 +47,9 @@ public struct PermutationIterator<SetElement>: Sequence, IteratorProtocol {
         guard let indices = self.indices else {
             return nil
         }
-        let current = indices.map { array[$0] }
         
-        self.indices = nextIndices(indices)
-        
-        return current
+        defer { self.indices = nextIndices(indices) }
+        return indices.map { array[$0] }
     }
 }
 

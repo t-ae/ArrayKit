@@ -2,15 +2,17 @@
 import XCTest
 import ArrayKit
 
-func rand() -> Double {
+private func rand() -> Double {
     return Double(arc4random_uniform(UInt32.max)) / Double(UInt32.max)
 }
 
-func calcScore(_ i: [Bool]) -> Double {
+private func calcScore(_ i: [Bool]) -> Double {
     return Double(i.filter { $0 }.count) / Double(i.count)
 }
 
-func crossover(_ lhs: [Bool], _ rhs: [Bool]) -> ([Bool], [Bool]) {
+private typealias Individual = [Bool]
+
+private func crossover(_ lhs: Individual, _ rhs: Individual) -> (Individual, Individual) {
     assert(lhs.count == rhs.count)
     
     var resultL = lhs
@@ -22,14 +24,12 @@ func crossover(_ lhs: [Bool], _ rhs: [Bool]) -> ([Bool], [Bool]) {
     return (resultL, resultR)
 }
 
-func describe(_ i: [Bool]) -> String {
+private func describe(_ i: [Bool]) -> String {
     return String(i.map { $0 ? "1" : "0" })
 }
 
 #if !SWIFT_PACKAGE
 class OneMaxTests: XCTestCase {
-    
-    typealias Individual = [Bool]
     
     let N = 128
     let length = 128

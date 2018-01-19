@@ -6,12 +6,13 @@ private func rand() -> Double {
     return Double(arc4random_uniform(UInt32.max)) / Double(UInt32.max)
 }
 
-private func calcScore(_ i: [Bool]) -> Double {
+private typealias Individual = [Bool]
+
+private func calcScore(_ i: Individual) -> Double {
     return Double(i.filter { $0 }.count) / Double(i.count)
 }
 
-private typealias Individual = [Bool]
-
+// two point crossover
 private func crossover(_ lhs: Individual, _ rhs: Individual) -> (Individual, Individual) {
     assert(lhs.count == rhs.count)
     
@@ -67,6 +68,7 @@ class OneMaxTests: XCTestCase {
             
             // crossover
             while nextGroup.count < N {
+                // roulette selection
                 let p = group.randomPick(n: 2, by: odds)!
                 
                 let (r1, r2) = crossover(p[0], p[1])

@@ -38,6 +38,7 @@ private let distanceTable = (0..<numCities).map { a in (0..<numCities).map { b i
 // true minimum distance
 private let minimumTotalDistance = Double(numCities) * sqrt(1 + 1 - 2*cos(2 * Double.pi / Double(numCities)))
 
+// order crossover
 private func crossover(_ a: Individual, _ b: Individual) -> (Individual, Individual) {
     let index = Int(arc4random_uniform(UInt32(a.count-1))) + 1
     
@@ -84,6 +85,7 @@ class TSPTests: XCTestCase {
             
             // crossover
             while nextGroup.count < N {
+                // roulette selection
                 let p = group.randomPick(n: 2, by: odds)!
                 
                 let (r1, r2) = crossover(p[0], p[1])
@@ -94,6 +96,7 @@ class TSPTests: XCTestCase {
             // mutation
             for i in 1..<nextGroup.count {
                 if rand() < 0.01 {
+                    // swap two gene
                     let a = Int(arc4random_uniform(UInt32(nextGroup[i].count)))
                     let b = Int(arc4random_uniform(UInt32(nextGroup[i].count)))
                     let tmp = nextGroup[i][a]

@@ -2,6 +2,21 @@
 import XCTest
 import ArrayKit
 
+private class Test: Comparable {
+    let i: Int
+    init(_ i: Int) {
+        self.i = i
+    }
+    
+    static func <(lhs: Test, rhs: Test) -> Bool {
+        return lhs.i < rhs.i
+    }
+    
+    static func ==(lhs: Test, rhs: Test) -> Bool {
+        return lhs.i == rhs.i
+    }
+}
+
 class SelectionTests: XCTestCase {
     
     func testQuickSelect() {
@@ -27,6 +42,12 @@ class SelectionTests: XCTestCase {
             XCTAssertEqual(array.quickSelect(k: 10), 10)
             XCTAssertEqual(array.quickSelect(k: 20), 20)
             XCTAssertEqual(array.quickSelect(k: 30), 30)
+        }
+        do {
+            let array = [Int](0..<100).shuffled().map(Test.init)
+            XCTAssertEqual(array.quickSelect(k: 10), Test(10))
+            XCTAssertEqual(array.quickSelect(k: 20), Test(20))
+            XCTAssertEqual(array.quickSelect(k: 30), Test(30))
         }
     }
     

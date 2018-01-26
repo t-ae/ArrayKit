@@ -44,6 +44,18 @@ class SelectionTests: XCTestCase {
             XCTAssertEqual(array.quickSelect(k: 30), 30)
         }
         do {
+            let array = (0..<10).flatMap { _ in [Int](0..<10) }
+            XCTAssertEqual(array.quickSelect(k: 0), 0)
+            XCTAssertEqual(array.quickSelect(k: 5), 0)
+            XCTAssertEqual(array.quickSelect(k: 9), 0)
+            XCTAssertEqual(array.quickSelect(k: 10), 1)
+            XCTAssertEqual(array.quickSelect(k: 15), 1)
+            XCTAssertEqual(array.quickSelect(k: 19), 1)
+            XCTAssertEqual(array.quickSelect(k: 50), 5)
+            XCTAssertEqual(array.quickSelect(k: 55), 5)
+            XCTAssertEqual(array.quickSelect(k: 59), 5)
+        }
+        do {
             let array = [Int](0..<100).shuffled().map(Test.init)
             XCTAssertEqual(array.quickSelect(k: 10), Test(10))
             XCTAssertEqual(array.quickSelect(k: 20), Test(20))

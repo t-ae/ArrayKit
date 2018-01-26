@@ -16,8 +16,11 @@ extension Array where Element: Comparable {
             let pivot = slice[pivotIndex]
             
             let rightStart = slice.partition(by: { $0 >= pivot })
-            
-            if k < rightStart {
+            if rightStart == slice.startIndex {
+                // all elements >= pivot
+                slice.sort()
+                return slice[k]
+            } else if k < rightStart {
                 slice = slice[..<rightStart]
             } else {
                 slice = slice[rightStart...]

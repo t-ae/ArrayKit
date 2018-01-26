@@ -7,6 +7,7 @@ class SearchingTests: XCTestCase {
         do {
             let array = [3, 2, 4, 1, 5, 7]
             XCTAssertEqual(array.argmin()!, 3)
+            XCTAssertEqual(array[0..<3].argmin()!, 1)
         }
         do {
             let array = [Int]()
@@ -22,6 +23,7 @@ class SearchingTests: XCTestCase {
         do {
             let array = [3, 2, 4, 1, 5, 0]
             XCTAssertEqual(array.argmax()!, 4)
+            XCTAssertEqual(array[0..<4].argmax()!, 2)
         }
         do {
             let array = [Int]()

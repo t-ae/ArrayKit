@@ -1,32 +1,36 @@
 
-extension Array {
+extension RandomAccessCollection {
     /// Returns the indices that would sort an array.
-    public func argsort(by areInIncreasingOrder: (Element, Element) throws ->Bool) rethrows -> [Int] {
-        let sorted = try self.enumerated().sorted { try areInIncreasingOrder($0.element, $1.element) }
-        return sorted.map { $0.offset }
-    }
-    
-    /// Returns stably sorted array.
-    public func stableSorted(by areInIncreasingOrder: (Element, Element) throws -> Bool) rethrows -> [Element] {
-        let sorted = try self.enumerated().sorted {
-            if try areInIncreasingOrder($0.element, $1.element) {
-                return true
-            } else if try areInIncreasingOrder($1.element, $0.element) {
-                return false
-            } else {
-                return $0.offset < $1.offset
-            }
-        }
-        return sorted.map { $0.element }
+    public func argsort(by areInIncreasingOrder: (Element, Element) throws ->Bool) rethrows -> [Index] {
+        let sorted = try zip(self, indices).sorted { try areInIncreasingOrder($0.0, $1.0) }
+        return sorted.map { $0.1 }
     }
 }
 
-extension Array where Element: Comparable {
+extension RandomAccessCollection where Element: Comparable {
     /// Returns the indices that would sort an array.
-    public func argsort() -> [Int] {
+    public func argsort() -> [Index] {
         return argsort(by: <)
     }
-    
+}
+
+extension RandomAccessCollection {
+    /// Returns stably sorted array.
+    public func stableSorted(by areInIncreasingOrder: (Element, Element) throws -> Bool) rethrows -> [Element] {
+        let sorted = try zip(self, indices).sorted {
+            if try areInIncreasingOrder($0.0, $1.0) {
+                return true
+            } else if try areInIncreasingOrder($1.0, $0.0) {
+                return false
+            } else {
+                return $0.1 < $1.1
+            }
+        }
+        return sorted.map { $0.0 }
+    }
+}
+
+extension RandomAccessCollection where Element: Comparable {
     /// Returns stably sorted array.
     public func stableSorted() -> [Element] {
         return stableSorted(by: <)

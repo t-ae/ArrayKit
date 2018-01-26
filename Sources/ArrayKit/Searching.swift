@@ -1,6 +1,5 @@
 
-extension RandomAccessCollection where Element: Comparable {
-    
+extension RandomAccessCollection {
     /// Returns the index of minimum element.
     /// If `array` has multiple minimums, the earliest index will be returned.
     public func argmin(by areInIncreasingOrder: (Element, Element) throws -> Bool) rethrows -> Index? {
@@ -21,12 +20,6 @@ extension RandomAccessCollection where Element: Comparable {
         return index
     }
     
-    /// Returns the index of minimum element.
-    /// If `array` has multiple minimums, the earliest index will be returned.
-    public func argmin() -> Index? {
-        return argmin(by: <)
-    }
-    
     /// Returns the index of maximum element.
     /// If `array` has multiple maximums, the earliest index will be returned.
     public func argmax(by areInIncreasingOrder: (Element, Element) throws -> Bool) rethrows -> Index? {
@@ -45,6 +38,15 @@ extension RandomAccessCollection where Element: Comparable {
         }
         
         return index
+    }
+}
+
+extension RandomAccessCollection where Element: Comparable {
+    
+    /// Returns the index of minimum element.
+    /// If `array` has multiple minimums, the earliest index will be returned.
+    public func argmin() -> Index? {
+        return argmin(by: <)
     }
     
     /// Returns the index of maximum element.

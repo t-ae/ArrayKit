@@ -17,6 +17,10 @@ class StatisticsTests: XCTestCase {
             let array = [1]
             XCTAssertEqual(array.median(), 1)
         }
+        do {
+            let array = [0, 0, 0, 1, 1, 1, 1].shuffled()
+            XCTAssertEqual(array.median(), 1)
+        }
     }
     
     func testModes() {

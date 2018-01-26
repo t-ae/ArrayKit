@@ -1,5 +1,5 @@
 
-extension Array where Element: Comparable {    
+extension Array where Element: Comparable {
     /// Returns k-th smallest element.
     ///
     /// This method doesn't consider exceptional values(like FloatingPoint.nan).

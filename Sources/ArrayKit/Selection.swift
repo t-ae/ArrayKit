@@ -5,7 +5,7 @@ extension Array where Element: Comparable {
     /// This method doesn't consider exceptional values(like FloatingPoint.nan).
     /// Remove them before use this method.
     public func quickSelect(k: Int) -> Element {
-        precondition(k < count, "Index out of ramge.")
+        precondition(k < count, "Index out of range.")
         var slice = ArraySlice(self)
         
         while true {

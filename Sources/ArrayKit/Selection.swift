@@ -9,21 +9,19 @@ extension Array where Element: Comparable {
         var slice = ArraySlice(self)
         
         while true {
-            if slice.count == 1 {
-                return slice.first!
-            }
             let pivotIndex = randint(slice.endIndex - slice.startIndex) + slice.startIndex
             let pivot = slice[pivotIndex]
             
+            slice.swapAt(pivotIndex, slice.endIndex-1)
             let rightStart = slice.partition(by: { $0 >= pivot })
-            if rightStart == slice.startIndex {
-                // all elements >= pivot
-                slice.sort()
+            slice.swapAt(rightStart, slice.endIndex-1)
+            
+            if k == rightStart {
                 return slice[k]
             } else if k < rightStart {
                 slice = slice[..<rightStart]
             } else {
-                slice = slice[rightStart...]
+                slice = slice[(rightStart+1)...]
             }
         }
     }

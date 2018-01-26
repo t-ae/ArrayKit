@@ -6,54 +6,21 @@ extension Array where Element: Comparable {
     /// Remove them before use this method.
     public func quickSelect(k: Int) -> Element {
         precondition(k < count, "Index out of ramge.")
-        var array = self
-        
-        var left = 0
-        var right = array.count
+        var slice = ArraySlice(self)
         
         while true {
-            if left == k && right == k+1 {
-                return array[k]
+            if slice.count == 1 {
+                return slice.first!
             }
+            let pivotIndex = randint(slice.endIndex - slice.startIndex) + slice.startIndex
+            let pivot = slice[pivotIndex]
             
-            var l = left
-            var r = right - 1
+            let rightStart = slice.partition(by: { $0 >= pivot })
             
-            var sep: Int = -1
-            
-            // pick pivot randomly
-            let pivotIndex = randint(right - left) + left
-            let pivot = array[pivotIndex]
-            
-            while true {
-                while array[l] < pivot {
-                    l += 1
-                    if l == r {
-                        sep = l
-                        break
-                    }
-                }
-                while array[r] >= pivot && l != r {
-                    r -= 1
-                    if l == r {
-                        sep = l
-                        break
-                    }
-                }
-                if l == r {
-                    break
-                }
-                
-                let temp = array[l]
-                array[l] = array[r]
-                array[r] = temp
-            }
-            
-            // For all i < sep, array[i] < pivot
-            if k < sep {
-                right = sep
+            if k < rightStart {
+                slice = slice[..<rightStart]
             } else {
-                left = sep
+                slice = slice[rightStart...]
             }
         }
     }

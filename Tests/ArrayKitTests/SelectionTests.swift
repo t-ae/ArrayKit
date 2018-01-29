@@ -61,6 +61,14 @@ class SelectionTests: XCTestCase {
             XCTAssertEqual(array.quickSelect(k: 20), Test(20))
             XCTAssertEqual(array.quickSelect(k: 30), Test(30))
         }
+        do {
+            let string = "becad"
+            XCTAssertEqual(string.quickSelect(k: 0), "a")
+            XCTAssertEqual(string.quickSelect(k: 1), "b")
+            XCTAssertEqual(string.quickSelect(k: 2), "c")
+            XCTAssertEqual(string.quickSelect(k: 3), "d")
+            XCTAssertEqual(string.quickSelect(k: 4), "e")
+        }
     }
     
 }

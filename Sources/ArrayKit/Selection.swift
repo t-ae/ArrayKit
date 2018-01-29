@@ -1,12 +1,12 @@
 
-extension Array where Element: Comparable {
+extension Collection where Element: Comparable {
     /// Returns k-th smallest element.
     ///
     /// This method doesn't consider exceptional values(like FloatingPoint.nan).
     /// Remove them before use this method.
     public func quickSelect(k: Int) -> Element {
         precondition(k < count, "Index out of range.")
-        var slice = self[0...]
+        var slice = ArraySlice(self)
         
         while true {
             let pivotIndex = randint(slice.endIndex - slice.startIndex) + slice.startIndex

@@ -17,6 +17,10 @@ class SearchingTests: XCTestCase {
             let array = [0, 0, 0, 0, 0]
             XCTAssertEqual(array.argmin()!, 0)
         }
+        do {
+            let string = "humpty dumpty sat on a wall"
+            XCTAssertEqual(string.argmin(), string.index(of: " "))
+        }
     }
     
     func testArgMax() {
@@ -32,6 +36,10 @@ class SearchingTests: XCTestCase {
         do {
             let array = [0, 0, 0, 0, 0]
             XCTAssertEqual(array.argmax()!, 0)
+        }
+        do {
+            let string = "humpty dumpty sat on a wall"
+            XCTAssertEqual(string.argmax(), string.index(of: "y"))
         }
     }
 }

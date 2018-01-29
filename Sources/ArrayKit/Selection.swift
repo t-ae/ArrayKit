@@ -6,7 +6,7 @@ extension Array where Element: Comparable {
     /// Remove them before use this method.
     public func quickSelect(k: Int) -> Element {
         precondition(k < count, "Index out of range.")
-        var slice = ArraySlice(self)
+        var slice = self[0...]
         
         while true {
             let pivotIndex = randint(slice.endIndex - slice.startIndex) + slice.startIndex

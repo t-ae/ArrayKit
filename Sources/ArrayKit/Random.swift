@@ -1,7 +1,5 @@
 import Foundation
 
-// MARK: - Utilities
-
 // MARK: - Single element
 extension Array {
     
@@ -182,12 +180,12 @@ extension Array {
     }
 }
 
-// MARK: - Generate range or slice
+// MARK: - Range or slice
 extension Array {
     /// Generate slice randomly with even odds.
     /// - Parameters:
     ///   - includesEmpty: If true, generated slice can be empty. Default is `false`.
-    ///   - using: RandomNumberGenerator to use.
+    ///   - generator: RandomNumberGenerator to use.
     public func randomSlice<G: RandomNumberGenerator>(includesEmpty: Bool = false,
                                                       using generator: inout G) -> ArraySlice<Element> {
         return self[randomRange(includesEmpty: includesEmpty, using: &generator)]
@@ -203,7 +201,7 @@ extension Array {
     /// Generate random range in array.
     /// - Parameters:
     ///   - includesEmpty: If true, generated range can be empty. Default is `false`.
-    ///   - using: RandomNumberGenerator to use.
+    ///   - generator: RandomNumberGenerator to use.
     public func randomRange<G: RandomNumberGenerator>(includesEmpty: Bool = false,
                                                       using generator: inout G) -> CountableRange<Int> {
         var number: Int
@@ -231,7 +229,6 @@ extension Array {
     /// Generate random range in array.
     /// - Parameters:
     ///   - includesEmpty: If true, generated range can be empty. Default is `false`.
-    ///   - using: RandomNumberGenerator to use.
     public func randomRange(includesEmpty: Bool = false) -> CountableRange<Int> {
         return randomRange(includesEmpty: includesEmpty, using: &Random.default)
     }

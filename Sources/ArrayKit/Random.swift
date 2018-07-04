@@ -85,7 +85,7 @@ extension Array {
 extension Array {
     /// Returns distinct `n` elements.
     ///
-    /// The order of result is not stable.
+    /// The order of result is stable.
     ///
     /// - Parameters:
     ///   - n: Number of elements to return.
@@ -96,7 +96,7 @@ extension Array {
     
     /// Returns distinct `n` elements.
     ///
-    /// The order of result is not stable.
+    /// The order of result is stable.
     ///
     /// - Parameters:
     ///   - n: Number of elements to return.
@@ -106,7 +106,7 @@ extension Array {
     
     /// Returns distinct `n` elements.
     ///
-    /// The order of result is not stable, and elements with high odds tend to appear earlier in result.
+    /// The order of result is stable.
     ///
     /// - Parameters:
     ///   - n: Number of elements to return.
@@ -128,23 +128,21 @@ extension Array {
             }
             
             var weights = weights
-            var rest = self
-            var result = [Element]()
-            result.reserveCapacity(n)
+            var resultIndices = [Int]()
+            resultIndices.reserveCapacity(n)
             for _ in 0..<n {
                 let cumulativeWeights = weights.scan(0, +)
                 let r = F.random(in: 0..<cumulativeWeights.last!, using: &generator)
                 let i = cumulativeWeights.index { r <= $0 }!
-                weights.remove(at: i)
-                let e = rest.remove(at: i)
-                result.append(e)
+                weights[i] = 0 // won't select again
+                resultIndices.append(i)
             }
-            return result
+            return resultIndices.map { self[$0] }
     }
     
     /// Returns distinct `n` elements.
     ///
-    /// The order of result is not stable, and elements with high odds tend to appear earlier in result.
+    /// The order of result is stable.
     ///
     /// - Parameters:
     ///   - n: Number of elements to return.
@@ -160,7 +158,7 @@ extension Array {
     
     /// Returns distinct `n` elements.
     ///
-    /// The order of result is not stable, and large weight elements tend to appear earlier in result.
+    /// The order of result is stable.
     ///
     /// - Parameters:
     ///   - n: Number of elements to return.
@@ -174,7 +172,7 @@ extension Array {
     
     /// Returns distinct `n` elements.
     ///
-    /// The order of result is not stable, and large weight elements tend to appear earlier in result.
+    /// The order of result is stable.
     ///
     /// - Parameters:
     ///   - n: Number of elements to return.

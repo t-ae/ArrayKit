@@ -22,12 +22,8 @@ extension Array where Element: Comparable {
 }
 
 extension Array where Element: Hashable {
-    /// Returns set of modes.
-    public func modes() -> Set<Element> {
-        guard count > 0 else {
-            return []
-        }
-        
+    /// Count the occurences of each element.
+    public func occurences() -> [Element: Int] {
         var bag = [Element: Int]()
         for e in self {
             if bag[e] == nil {
@@ -36,19 +32,18 @@ extension Array where Element: Hashable {
                 bag[e]! += 1
             }
         }
+        return bag
+    }
+    
+    /// Returns set of modes.
+    public func modes() -> Set<Element> {
+        let bag = occurences()
         
-        var modes: Set<Element> = []
-        var currentMax = Int.min
-        for (k, v) in bag {
-            if v > currentMax {
-                modes = [k]
-                currentMax = v
-            } else if v == currentMax {
-                modes.insert(k)
-            }
+        guard let maxim = bag.values.max() else {
+            return []
         }
         
-        return modes
+        return Set(bag.filter { k, v in v == maxim }.keys)
     }
 }
 

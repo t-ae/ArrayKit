@@ -32,7 +32,7 @@ class SeparationTests: XCTestCase {
         }
         do {
             let array = [Int](0..<3)
-            let result = array.split(4, omittingEmptySlices: false)
+            let result = array.split(4, includesEmptySlices: true)
             
             XCTAssertEqual(result, [ArraySlice(0..<1),
                                     ArraySlice(1..<2),

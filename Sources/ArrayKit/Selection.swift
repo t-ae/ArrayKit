@@ -8,7 +8,7 @@ extension Collection where Element: Comparable {
         var slice = ArraySlice(self)
         
         while true {
-            let pivotIndex = Int.random(in: slice.startIndex..<slice.endIndex)
+            let pivotIndex = slice.indices.randomElement()!
             let pivot = slice[pivotIndex]
             
             slice.swapAt(pivotIndex, slice.endIndex-1)

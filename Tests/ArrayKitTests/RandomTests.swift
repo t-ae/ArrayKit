@@ -1,4 +1,3 @@
-
 import XCTest
 import ArrayKit
 
@@ -8,13 +7,13 @@ class RandomTests: XCTestCase {
         do {
             let N = 100000
             let coin = [0, 1]
-            let flips = (0..<N).map { _ in coin.randomPick(by: [0.3, 0.7])! }
+            let flips = (0..<N).map { _ in coin.randomElement(weights: [0.3, 0.7])! }
             let mean = flips.mean()!
             XCTAssertEqual(mean, 0.7, accuracy: 1e-1)
         }
         do {
             let events: [Int] = []
-            XCTAssertNil(events.randomPick(by: []))
+            XCTAssertNil(events.randomElement(weights: []))
         }
     }
     
@@ -22,13 +21,13 @@ class RandomTests: XCTestCase {
         do {
             let N = 100000
             let coin = [0, 1]
-            let flips = (0..<N).map { _ in coin.randomPick(cumulativeWeights: [0.3, 1.0])! }
+            let flips = (0..<N).map { _ in coin.randomElement(cumulativeWeights: [0.3, 1.0])! }
             let mean = flips.mean()!
             XCTAssertEqual(mean, 0.7, accuracy: 1e-1)
         }
         do {
             let events: [Int] = []
-            XCTAssertNil(events.randomPick(cumulativeWeights: []))
+            XCTAssertNil(events.randomElement(cumulativeWeights: [Double]()))
         }
     }
     
@@ -36,13 +35,13 @@ class RandomTests: XCTestCase {
         do {
             let N = 100000
             let dice = [1, 2, 3, 4, 5, 6]
-            let rolls = (0..<N).map { _ in dice.randomPick(weights: [1, 1, 1, 1, 1, 1])! }
+            let rolls = (0..<N).map { _ in dice.randomElement(weights: [1, 1, 1, 1, 1, 1])! }
             let mean = rolls.mean()!
             XCTAssertEqual(mean, 3.5, accuracy: 1e-1)
         }
         do {
             let events: [Int] = []
-            XCTAssertNil(events.randomPick(weights: []))
+            XCTAssertNil(events.randomElement(weights: []))
         }
     }
     
@@ -50,7 +49,7 @@ class RandomTests: XCTestCase {
         do {
             let N = 100000
             let events = [1, 2, 3]
-            let pick2 = (0..<N).map { _ in events.randomPick(n: 2)! }
+            let pick2 = (0..<N).map { _ in events.randomElements(n: 2)! }
             
             // all elements are distinct
             XCTAssertFalse(pick2.contains { $0[0] == $0[1] })
@@ -74,13 +73,13 @@ class RandomTests: XCTestCase {
         }
         do {
             let events = [1, 2, 3]
-            let pick = events.randomPick(n: 3)!
+            let pick = events.randomElements(n: 3)!
             XCTAssertEqual(Set(pick), Set(events))
         }
         do {
             let events = [0, 1, 2]
-            XCTAssertEqual(events.randomPick(n: 0), [])
-            XCTAssertNil(events.randomPick(n: 4))
+            XCTAssertEqual(events.randomElements(n: 0), [])
+            XCTAssertNil(events.randomElements(n: 4))
         }
     }
     
@@ -88,7 +87,7 @@ class RandomTests: XCTestCase {
         do {
             let N = 100000
             let events = [1, 2, 3]
-            let pick2 = (0..<N).map { _ in events.randomPick(n: 2, by: [0.333, 0.333, 0.333])! }
+            let pick2 = (0..<N).map { _ in events.randomElements(n: 2, weights: [0.333, 0.333, 0.333])! }
             
             // all elements are distinct
             XCTAssertFalse(pick2.contains { $0[0] == $0[1] })
@@ -112,14 +111,14 @@ class RandomTests: XCTestCase {
         }
         do {
             let events = [1, 2, 3]
-            let pick = events.randomPick(n: 3, by: [0.1, 0.2, 0.3])!
+            let pick = events.randomElements(n: 3, weights: [0.1, 0.2, 0.3])!
             XCTAssertEqual(Set(pick), Set(events))
         }
         do {
             let events = [0, 1, 2]
-            XCTAssertEqual(events.randomPick(n: 0, by: [0, 0.1, 0.2]), [])
-            XCTAssertEqual(events.randomPick(n: 2, by: [0, 0.1, 0.2]).map { Set($0) }, [1, 2])
-            XCTAssertNil(events.randomPick(n: 4, by: [0, 0.1, 0.2]))
+            XCTAssertEqual(events.randomElements(n: 0, weights: [0, 0.1, 0.2]), [])
+            XCTAssertEqual(events.randomElements(n: 2, weights: [0, 0.1, 0.2]).map { Set($0) }, [1, 2])
+            XCTAssertNil(events.randomElements(n: 4, weights: [0, 0.1, 0.2]))
         }
     }
     
@@ -127,7 +126,7 @@ class RandomTests: XCTestCase {
         do {
             let N = 100000
             let events = [1, 2, 3]
-            let pick2 = (0..<N).map { _ in events.randomPick(n: 2, weights: [1, 1, 1])! }
+            let pick2 = (0..<N).map { _ in events.randomElements(n: 2, weights: [1, 1, 1])! }
             
             // all elements are distinct
             XCTAssertFalse(pick2.contains { $0[0] == $0[1] })
@@ -151,14 +150,14 @@ class RandomTests: XCTestCase {
         }
         do {
             let events = [1, 2, 3]
-            let pick = events.randomPick(n: 3, weights: [1, 1, 1])!
+            let pick = events.randomElements(n: 3, weights: [1, 1, 1])!
             XCTAssertEqual(Set(pick), Set(events))
         }
         do {
             let events = [0, 1, 2]
-            XCTAssertEqual(events.randomPick(n: 0, weights: [0, 1, 2]), [])
-            XCTAssertEqual(events.randomPick(n: 2, weights: [0, 1, 2]).map { Set($0) }, [1, 2])
-            XCTAssertNil(events.randomPick(n: 4, weights: [0, 1, 2]))
+            XCTAssertEqual(events.randomElements(n: 0, weights: [0, 1, 2]), [])
+            XCTAssertEqual(events.randomElements(n: 2, weights: [0, 1, 2]).map { Set($0) }, [1, 2])
+            XCTAssertNil(events.randomElements(n: 4, weights: [0, 1, 2]))
         }
     }
     

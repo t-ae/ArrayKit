@@ -69,7 +69,7 @@ class OneMaxTests: XCTestCase {
             // crossover
             while nextGroup.count < N {
                 // roulette selection
-                let p = group.randomPick(n: 2, by: odds)!
+                let p = group.randomElements(n: 2, weights: odds)!
                 
                 let (r1, r2) = crossover(p[0], p[1])
                 nextGroup.append(r1)

@@ -42,7 +42,7 @@ extension Array where Element == Bool {
         var result = [Bool](repeating: false, count: odds.count)
         
         for i in 0..<odds.count {
-            let r = randUniform()
+            let r = Double.random(in: 0..<1)
             result[i] = r < odds[i]
         }
         
@@ -55,7 +55,7 @@ extension Array where Element == Bool {
         var result = [Bool](repeating: false, count: count)
         
         for i in 0..<count {
-            let r = randUniform()
+            let r = Double.random(in: 0..<1)
             result[i] = r < odds
         }
         

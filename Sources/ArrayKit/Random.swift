@@ -3,74 +3,49 @@ import Foundation
 
 // MARK: - Utilities
 
-// Xorshift+
-// https://en.wikipedia.org/wiki/Xorshift#xorshift+
-var xorshift_s = [
-    UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max)),
-    UInt64(arc4random_uniform(UInt32.max)) << 32 | UInt64(arc4random_uniform(UInt32.max))
-]
-func xorshift64bit() -> UInt64 {
-    var x = xorshift_s[0]
-    let y = xorshift_s[1]
-    
-    xorshift_s[0] = y
-    x ^= x << 23
-    xorshift_s[1] = x ^ y ^ (x >> 17) ^ (y >> 26)
-    return xorshift_s[1] &+ y
-}
-
-/// Generates random Double value from [0, 1].
-func randUniform() -> Double {
-    return Double(xorshift64bit()) / Double(UInt64.max)
-}
-
-/// Generates random Int value from [0, upperBound).
-func randint(_ upperBound: Int) -> Int {
-    return Int(xorshift64bit() % UInt64(upperBound))
-}
-
 // MARK: - Pick single element
 extension Array {
     
-    /// Picks one element with even odds.
-    public func randomPick() -> Element? {
-        guard count > 0 else {
-            return nil
-        }
-        let index = randint(count)
-        return self[index]
-    }
-    
-    /// Picks one element.
-    /// - Parameter odds: The probabilities associated with each element.
-    /// - Warning: Small odds can cause computation error. Use `randomPick(cumulativeWeights:)` or `randomPick(weights:)` instead.
-    public func randomPick(by odds: [Double]) -> Element? {
-        return randomPick(cumulativeWeights: odds.scan(0, +))
-    }
-    
-    /// Picks one element.
+    /// Returns a random element with weighted odds.
     /// - Paramter:
     ///   - cumulativeWeights: The cumulative weights associated with each element.
-    public func randomPick(cumulativeWeights: [Double]) -> Element? {
-        precondition(cumulativeWeights.count == count, "`cumulativeWeights` size must match with array size.")
-        precondition(zip(cumulativeWeights, cumulativeWeights.dropFirst()).all { $0 <= $1 },
-                     "`cumulativeWeights` is not ascending.")
-        
-        guard count > 0 else {
-            return nil
-        }
-        
-        precondition(cumulativeWeights.first! >= 0, "`cumulativeWeights` must start with positive value.")
-        
-        let r = randUniform() * cumulativeWeights.last!
-        let index = cumulativeWeights.index { $0 > r }!
-        return self[index]
+    ///   - using: RandomNumberGenerator to use.
+    public func randomPick<F: BinaryFloatingPoint, G: RandomNumberGenerator>(cumulativeWeights: [F],
+                                                                             using generator: inout G) -> Element?
+        where F.RawSignificand : FixedWidthInteger,
+        F.RawSignificand.Stride : SignedInteger,
+        F.RawSignificand.Magnitude : UnsignedInteger {
+            precondition(cumulativeWeights.count == count, "`cumulativeWeights` size must match with array size.")
+            precondition(zip(cumulativeWeights, cumulativeWeights.dropFirst()).all { $0 <= $1 },
+                         "`cumulativeWeights` is not ascending.")
+            
+            guard count > 0 else {
+                return nil
+            }
+            
+            precondition(cumulativeWeights.first! >= 0, "`cumulativeWeights` must start with positive value.")
+            
+            let r = F.random(in: 0..<cumulativeWeights.last!, using: &generator)
+            let index = cumulativeWeights.index { $0 > r }!
+            return self[index]
     }
     
-    /// Picks one element.
+    /// Returns a random element with weighted odds.
+    /// - Paramter:
+    ///   - cumulativeWeights: The cumulative weights associated with each element.
+    public func randomPick<F: BinaryFloatingPoint>(cumulativeWeights: [F]) -> Element?
+        where F.RawSignificand : FixedWidthInteger,
+        F.RawSignificand.Stride : SignedInteger,
+        F.RawSignificand.Magnitude : UnsignedInteger {
+            return randomPick(cumulativeWeights: cumulativeWeights, using: &Random.default)
+    }
+    
+    /// Returns a random element with weighted odds.
     /// - Paramter:
     ///   - weights: The weights associated with each element.
-    public func randomPick(weights: [Int]) -> Element? {
+    ///   - using: RandomNumberGenerator to use.
+    public func randomPick<G: RandomNumberGenerator>(weights: [Int],
+                                                     using generator: inout G) -> Element? {
         precondition(weights.count == count, "`weights` size must match with array size.")
         precondition(weights.all { $0 >= 0 }, "All `weights` must be positive.")
         
@@ -81,7 +56,7 @@ extension Array {
         precondition(weights.some { $0 > 0 }, "Can't pick because all `weights` are 0.")
         
         let weightSum = weights.sum()!
-        let r = randint(weightSum)
+        let r = Int.random(in: 0..<weightSum, using: &generator)
         var acc = 0
         for i in 0..<weights.count {
             acc += weights[i]
@@ -90,6 +65,13 @@ extension Array {
             }
         }
         fatalError("No elements picked.")
+    }
+    
+    /// Returns a random element with weighted odds.
+    /// - Paramter:
+    ///   - weights: The weights associated with each element.
+    public func randomPick(weights: [Int]) -> Element? {
+        return randomPick(weights: weights, using: &Random.default)
     }
 }
 
@@ -102,7 +84,7 @@ extension Array {
     /// - Parameters:
     ///   - n: Number of elements to pick.
     ///   - odds: The probabilities associated with each element.
-    public func randomPick(n: Int) -> [Element]? {
+    public func randomPick<G: RandomNumberGenerator>(n: Int, using generaor: inout G) -> [Element]? {
         precondition(n >= 0, "`n` must be positive.")
         guard n <= count else {
             return nil
@@ -113,7 +95,7 @@ extension Array {
         
         var rest = self
         for _ in 0..<n {
-            let i = randint(rest.count)
+            let i = Int.random(in: 0..<rest.count)
             let e = rest.remove(at: i)
             result.append(e)
         }
@@ -128,27 +110,32 @@ extension Array {
     /// - Parameters:
     ///   - n: Number of elements to pick.
     ///   - odds: The probabilities associated with each element.
-    public func randomPick(n: Int, by odds: [Double]) -> [Element]? {
-        precondition(odds.count == count, "`odds` size must match with array size.")
-        precondition(n >= 0, "`n` must be positive.")
-        
-        guard n <= count else {
-            return nil
-        }
-        
-        var odds = odds
-        var rest = self
-        var result = [Element]()
-        result.reserveCapacity(n)
-        for _ in 0..<n {
-            let cumulativeOdds = odds.scan(0, +)
-            let r = randUniform() * cumulativeOdds.last!
-            let i = cumulativeOdds.index { r <= $0 }!
-            odds.remove(at: i)
-            let e = rest.remove(at: i)
-            result.append(e)
-        }
-        return result
+    public func randomPick<F: BinaryFloatingPoint, G: RandomNumberGenerator>(n: Int,
+                                                                             by odds: [F],
+                                                                             using generator: inout G) -> [Element]?
+        where F.RawSignificand : FixedWidthInteger,
+        F.RawSignificand.Stride : SignedInteger,
+        F.RawSignificand.Magnitude : UnsignedInteger {
+            precondition(odds.count == count, "`odds` size must match with array size.")
+            precondition(n >= 0, "`n` must be positive.")
+            
+            guard n <= count else {
+                return nil
+            }
+            
+            var odds = odds
+            var rest = self
+            var result = [Element]()
+            result.reserveCapacity(n)
+            for _ in 0..<n {
+                let cumulativeOdds = odds.scan(0, +)
+                let r = F.random(in: 0..<cumulativeOdds.last!, using: &generator)
+                let i = cumulativeOdds.index { r <= $0 }!
+                odds.remove(at: i)
+                let e = rest.remove(at: i)
+                result.append(e)
+            }
+            return result
     }
     
     /// Picks distinct `n` elements.
@@ -158,7 +145,7 @@ extension Array {
     /// - Parameters:
     ///   - n: Number of elements to pick.
     ///   - weights: The probabilities associated with each element.
-    public func randomPick(n: Int, weights: [Int]) -> [Element]? {
+    public func randomPick<G: RandomNumberGenerator>(n: Int, weights: [Int], using generator: inout G) -> [Element]? {
         precondition(n >= 0, "`n` must be positive.")
         precondition(weights.count == count, "`weights` size must match with array size.")
         precondition(weights.all { $0 >= 0 }, "All elements of `weights` mus be positive.")
@@ -174,7 +161,7 @@ extension Array {
         for _ in 0..<n {
             let weightsSum = weights.sum()!
             precondition(weightsSum > 0, "Less than `n` elements have non zero weights.")
-            let r = randint(weightsSum)
+            let r = Int.random(in: 0..<weightsSum, using: &generator)
             
             var acc = 0
             for i in 0..<weights.count {
@@ -196,19 +183,21 @@ extension Array {
     /// Generate slice randomly with even odds.
     /// - Parameters:
     ///   - includesEmpty: If true, generated slice can be empty. Default is `false`.
-    public func randomSlice(includesEmpty: Bool = false) -> ArraySlice<Element> {
-        return self[randomRange(includesEmpty: includesEmpty)]
+    public func randomSlice<G: RandomNumberGenerator>(includesEmpty: Bool = false,
+                                                      using generator: inout G) -> ArraySlice<Element> {
+        return self[randomRange(includesEmpty: includesEmpty, using: &generator)]
     }
     
     /// Generate random range in array.
     /// - Parameters:
     ///   - includesEmpty: If true, generated range can be empty. Default is `false`.
-    public func randomRange(includesEmpty: Bool = false) -> CountableRange<Int> {
+    public func randomRange<G: RandomNumberGenerator>(includesEmpty: Bool = false,
+                                                      using generator: inout G) -> CountableRange<Int> {
         var number: Int
         if includesEmpty {
-            number = randint(count*(1+count)/2 + 1) - 1
+            number = Int.random(in: 0..<count*(1+count)/2 + 1, using: &generator) - 1
         } else {
-            number = randint(count*(1+count)/2)
+            number = Int.random(in: 0..<count*(1+count)/2, using: &generator)
         }
         
         guard number >= 0 else {
@@ -224,29 +213,5 @@ extension Array {
             index += 1
         }
         preconditionFailure()
-    }
-}
-
-// MARK: - Shuffle
-extension Array {
-    /// Shuffles array.
-    public mutating func shuffle() {
-        guard count > 0 else {
-            return
-        }
-        
-        for i in (1..<count).reversed() {
-            let r = randint(i+1)
-            let temp = self[i]
-            self[i] = self[r]
-            self[r] = temp
-        }
-    }
-    
-    /// Shuffles array.
-    public func shuffled() -> Array {
-        var result = self
-        result.shuffle()
-        return result
     }
 }

@@ -1,4 +1,3 @@
-
 /// Negation.
 public prefix func ~(array: [Bool]) -> [Bool] {
     return array.map { !$0 }

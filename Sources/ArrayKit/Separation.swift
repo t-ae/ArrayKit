@@ -1,4 +1,3 @@
-
 extension Array {
     /// Separates array into `sections` slices.
     /// If `count < sections`, return array contains `count` single element slices.

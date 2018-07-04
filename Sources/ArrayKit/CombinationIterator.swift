@@ -1,4 +1,3 @@
-
 public struct CombinationIterator<SetElement>: Sequence, IteratorProtocol {
     let array: [SetElement]
     let k: Int

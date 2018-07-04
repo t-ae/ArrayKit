@@ -1,4 +1,3 @@
-
 extension Array {
     /// Permutes elements by `order`.
     public func permuted(by order: [Int]) -> Array {

@@ -1,4 +1,3 @@
-
 // traveling salesman problem
 
 import XCTest

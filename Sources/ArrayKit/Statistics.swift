@@ -1,4 +1,3 @@
-
 extension Array where Element: Numeric {
     /// Returns sum of elements.
     public func sum() -> Element? {

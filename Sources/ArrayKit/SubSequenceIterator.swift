@@ -1,4 +1,3 @@
-
 public struct SubSequenceIterator<SequenceElement>: Sequence, IteratorProtocol {
     let array: [SequenceElement]
     var lengthIterator: IndexingIterator<CountableRange<Int>>

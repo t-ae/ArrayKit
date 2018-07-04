@@ -1,4 +1,3 @@
-
 extension Collection where Element: Comparable {
     /// Returns k-th smallest element.
     ///

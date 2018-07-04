@@ -1,4 +1,3 @@
-
 extension Collection {
     /// Returns the index of minimum element.
     /// If `array` has multiple minimums, the earliest index will be returned.

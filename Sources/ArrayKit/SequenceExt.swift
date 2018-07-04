@@ -1,4 +1,3 @@
-
 extension Sequence {
     /// Checks if all elements satisfy `predicate`.
     public func all(_ predicate: (Element)->Bool) -> Bool {

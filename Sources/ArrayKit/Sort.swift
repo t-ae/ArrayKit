@@ -1,4 +1,3 @@
-
 extension Collection {
     /// Returns the indices that would sort an array.
     public func argsort(by areInIncreasingOrder: (Element, Element) throws ->Bool) rethrows -> [Index] {

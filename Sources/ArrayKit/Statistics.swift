@@ -54,12 +54,13 @@ extension Array where Element == Int {
     }
     
     /// Returns variance of elements.
-    public func variance() -> Double? {
-        return self.moments()?.variance
+    /// Parameter ddof: "Delta Degrees of Freedom", the divisor used in the calculation is `count - ddof`. default: 0
+    public func variance(ddof: Int = 0) -> Double? {
+        return self.moments(ddof: ddof)?.variance
     }
     
     /// Returns mean and variance of elements.
-    public func moments() -> (mean: Double, variance: Double)? {
+    public func moments(ddof: Int = 0) -> (mean: Double, variance: Double)? {
         guard count > 0 else {
             return nil
         }
@@ -70,7 +71,11 @@ extension Array where Element == Int {
             sum2 += e*e
         }
         let mean = Double(sum) / Double(count)
-        let variance = Double(sum2) / Double(count) - mean*mean
+        var variance = Double(sum2) / Double(count) - mean*mean
+        
+        if ddof != 0 {
+            variance *= Double(count) / Double(count - ddof)
+        }
         
         return (mean, variance)
     }
@@ -109,12 +114,14 @@ extension Array where Element: FloatingPoint {
     }
     
     /// Returns variance of elements.
-    public func variance() -> Element? {
-        return self.moments()?.variance
+    /// Parameter ddof: "Delta Degrees of Freedom", the divisor used in the calculation is `count - ddof`. default: 0
+    public func variance(ddof: Int = 0) -> Element? {
+        return self.moments(ddof: ddof)?.variance
     }
     
     /// Returns mean and variance of elements.
-    public func moments() -> (mean: Element, variance: Element)? {
+    /// Parameter ddof: "Delta Degrees of Freedom", the divisor used in the calculation is `count - ddof`. default: 0
+    public func moments(ddof: Int = 0) -> (mean: Element, variance: Element)? {
         var sum: Element = 0
         var sum2: Element = 0
         for e in self {
@@ -122,94 +129,112 @@ extension Array where Element: FloatingPoint {
             sum2 += e*e
         }
         let mean = sum / Element(count)
-        let variance = sum2 / Element(count) - mean*mean
+        var variance = sum2 / Element(count) - mean*mean
+        
+        if ddof != 0{
+            variance *= Element(count) / Element(count - ddof)
+        }
         
         return (mean, variance)
     }
 }
 
-#if os(macOS) || os(iOS)
-    import Accelerate
-    
-    extension Array where Element == Float {
-        /// Returns sum of elements.
-        public func sum() -> Element? {
-            guard count > 0 else {
-                return nil
-            }
-            var result: Element = 0
-            vDSP_sve(self, 1, &result, vDSP_Length(count))
-            return result
+#if canImport(Accelerate)
+
+import Accelerate
+
+extension Array where Element == Float {
+    /// Returns sum of elements.
+    public func sum() -> Element? {
+        guard count > 0 else {
+            return nil
         }
-        
-        /// Returns mean of elements.
-        public func mean() -> Element? {
-            guard count > 0 else {
-                return nil
-            }
-            var result: Element = 0
-            vDSP_meanv(self, 1, &result, vDSP_Length(count))
-            return result
-        }
-        
-        /// Returns variance of elements.
-        public func variance() -> Element? {
-            return self.moments()?.variance
-        }
-        
-        /// Returns mean and variance of elements.
-        public func moments() -> (mean: Element, variance: Element)? {
-            guard count > 0 else {
-                return nil
-            }
-            var sum: Element = 0
-            var sum2: Element = 0
-            vDSP_sve_svesq(self, 1, &sum, &sum2, vDSP_Length(count))
-            let mean = sum / Element(count)
-            let variance = sum2 / Element(count) - mean*mean
-            
-            return (mean, variance)
-        }
+        var result: Element = 0
+        vDSP_sve(self, 1, &result, vDSP_Length(count))
+        return result
     }
     
-    extension Array where Element == Double {
-        /// Returns sum of elements.
-        public func sum() -> Element? {
-            guard count > 0 else {
-                return nil
-            }
-            var result: Element = 0
-            vDSP_sveD(self, 1, &result, vDSP_Length(count))
-            return result
+    /// Returns mean of elements.
+    public func mean() -> Element? {
+        guard count > 0 else {
+            return nil
         }
-        
-        /// Returns mean of elements.
-        public func mean() -> Element? {
-            guard count > 0 else {
-                return nil
-            }
-            var result: Element = 0
-            vDSP_meanvD(self, 1, &result, vDSP_Length(count))
-            return result
-        }
-        
-        /// Returns variance of elements.
-        public func variance() -> Element? {
-            return self.moments()?.variance
-        }
-        
-        /// Returns mean and variance of elements.
-        public func moments() -> (mean: Element, variance: Element)? {
-            guard count > 0 else {
-                return nil
-            }
-            var sum: Element = 0
-            var sum2: Element = 0
-            vDSP_sve_svesqD(self, 1, &sum, &sum2, vDSP_Length(count))
-            let mean = sum / Element(count)
-            let variance = sum2 / Element(count) - mean*mean
-            
-            return (mean, variance)
-        }
+        var result: Element = 0
+        vDSP_meanv(self, 1, &result, vDSP_Length(count))
+        return result
     }
+    
+    /// Returns variance of elements.
+    /// Parameter ddof: "Delta Degrees of Freedom", the divisor used in the calculation is `count - ddof`. default: 0
+    public func variance(ddof: Int = 0) -> Element? {
+        return self.moments(ddof: ddof)?.variance
+    }
+    
+    /// Returns mean and variance of elements.
+    /// Parameter ddof: "Delta Degrees of Freedom", the divisor used in the calculation is `count - ddof`. default: 0
+    public func moments(ddof: Int = 0) -> (mean: Element, variance: Element)? {
+        guard count > 0 else {
+            return nil
+        }
+        var sum: Element = 0
+        var sum2: Element = 0
+        vDSP_sve_svesq(self, 1, &sum, &sum2, vDSP_Length(count))
+        let mean = sum / Element(count)
+        var variance = sum2 / Element(count) - mean*mean
+        
+        if ddof != 0{
+            variance *= Element(count) / Element(count - ddof)
+        }
+        
+        return (mean, variance)
+    }
+}
+
+extension Array where Element == Double {
+    /// Returns sum of elements.
+    public func sum() -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        var result: Element = 0
+        vDSP_sveD(self, 1, &result, vDSP_Length(count))
+        return result
+    }
+    
+    /// Returns mean of elements.
+    public func mean() -> Element? {
+        guard count > 0 else {
+            return nil
+        }
+        var result: Element = 0
+        vDSP_meanvD(self, 1, &result, vDSP_Length(count))
+        return result
+    }
+    
+    /// Returns variance of elements.
+    /// Parameter ddof: "Delta Degrees of Freedom", the divisor used in the calculation is `count - ddof`. default: 0
+    public func variance(ddof: Int = 0) -> Element? {
+        return self.moments(ddof: ddof)?.variance
+    }
+    
+    /// Returns mean and variance of elements.
+    /// Parameter ddof: "Delta Degrees of Freedom", the divisor used in the calculation is `count - ddof`. default: 0
+    public func moments(ddof: Int = 0) -> (mean: Element, variance: Element)? {
+        guard count > 0 else {
+            return nil
+        }
+        var sum: Element = 0
+        var sum2: Element = 0
+        vDSP_sve_svesqD(self, 1, &sum, &sum2, vDSP_Length(count))
+        let mean = sum / Element(count)
+        var variance = sum2 / Element(count) - mean*mean
+        
+        if ddof != 0 {
+            variance *= Element(count) / Element(count - ddof)
+        }
+        
+        return (mean, variance)
+    }
+}
+
 #endif

@@ -55,5 +55,5 @@ array.subSequences() // Sequence of [], [3], [4], [5], [3, 4], [4, 5], [3, 4, 5]
 ```
 
 ## Example
-- [Solve one max problem with Genetic Algorithm](https://github.com/t-ae/ArrayKit/blob/master/Tests/ArrayKitTests/OneMaxTests.swift)
-- [Solve TSP with Genetic Algorithm](https://github.com/t-ae/ArrayKit/blob/master/Tests/ArrayKitTests/TSPTests.swift)
+- [Solve one max problem with Genetic Algorithm](https://github.com/t-ae/ArrayKit/blob/master/Tests/PerformanceTests/OneMaxTests.swift)
+- [Solve TSP with Genetic Algorithm](https://github.com/t-ae/ArrayKit/blob/master/Tests/PerformanceTests/TSPTests.swift)

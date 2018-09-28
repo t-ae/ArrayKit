@@ -39,9 +39,7 @@ extension Array where Element == Bool {
     /// i-th element becomes `true` with the probability `odds[i]`.
     public static func makeRandomMask<F: BinaryFloatingPoint, G: RandomNumberGenerator>(odds: [F],
                                                                                         using generator: inout G) -> [Bool]
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
+        where F.RawSignificand : FixedWidthInteger {
             var result = [Bool](repeating: false, count: odds.count)
             
             for i in 0..<odds.count {
@@ -55,10 +53,9 @@ extension Array where Element == Bool {
     /// Makes random mask array.
     /// i-th element becomes `true` with the probability `odds[i]`.
     public static func makeRandomMask<F: BinaryFloatingPoint>(odds: [F]) -> [Bool]
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
-            return makeRandomMask(odds: odds, using: &Random.default)
+        where F.RawSignificand : FixedWidthInteger {
+            var g = SystemRandomNumberGenerator()
+            return makeRandomMask(odds: odds, using: &g)
     }
     
     /// Makes random mask array.
@@ -66,9 +63,7 @@ extension Array where Element == Bool {
     public static func makeRandomMask<F: BinaryFloatingPoint, G: RandomNumberGenerator>(odds: F,
                                                                                         count: Int,
                                                                                         using generator: inout G) -> [Bool]
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
+        where F.RawSignificand : FixedWidthInteger {
         var result = [Bool](repeating: false, count: count)
         
         for i in 0..<count {
@@ -83,10 +78,9 @@ extension Array where Element == Bool {
     /// Each element becomes `true` with the probability `odds`.
     public static func makeRandomMask<F: BinaryFloatingPoint>(odds: F,
                                                               count: Int) -> [Bool]
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
-            return makeRandomMask(odds: odds, count: count, using: &Random.default)
+        where F.RawSignificand : FixedWidthInteger {
+            var g = SystemRandomNumberGenerator()
+            return makeRandomMask(odds: odds, count: count, using: &g)
     }
 }
 

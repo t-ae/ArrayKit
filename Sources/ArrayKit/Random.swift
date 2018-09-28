@@ -9,9 +9,7 @@ extension Array {
     ///   - generator: RandomNumberGenerator to use.
     public func randomElement<F: BinaryFloatingPoint, G: RandomNumberGenerator>(cumulativeWeights: [F],
                                                                                 using generator: inout G) -> Element?
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
+        where F.RawSignificand : FixedWidthInteger {
             precondition(cumulativeWeights.count == count, "`cumulativeWeights` size must match with array size.")
             
             guard count > 0 else {
@@ -31,10 +29,9 @@ extension Array {
     /// - Paramter:
     ///   - cumulativeWeights: The cumulative weights associated with each element.
     public func randomElement<F: BinaryFloatingPoint>(cumulativeWeights: [F]) -> Element?
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
-            return randomElement(cumulativeWeights: cumulativeWeights, using: &Random.default)
+        where F.RawSignificand : FixedWidthInteger {
+            var g = SystemRandomNumberGenerator()
+            return randomElement(cumulativeWeights: cumulativeWeights, using: &g)
     }
     
     /// Returns a random element with weighted odds.
@@ -43,9 +40,7 @@ extension Array {
     ///   - generator: RandomNumberGenerator to use.
     public func randomElement<F: BinaryFloatingPoint, G: RandomNumberGenerator>(weights: [F],
                                                                                 using generator: inout G) -> Element?
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
+        where F.RawSignificand : FixedWidthInteger {
             let cumulative = weights.scan(0, { $0 + $1 })
             return randomElement(cumulativeWeights: cumulative, using: &generator)
     }
@@ -54,10 +49,9 @@ extension Array {
     /// - Paramter:
     ///   - weights: The weights associated with each element.
     public func randomElement<F: BinaryFloatingPoint>(weights: [F]) -> Element?
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger{
-            return randomElement(weights: weights, using: &Random.default)
+        where F.RawSignificand : FixedWidthInteger {
+            var g = SystemRandomNumberGenerator()
+            return randomElement(weights: weights, using: &g)
     }
     
     
@@ -74,7 +68,8 @@ extension Array {
     /// - Paramter:
     ///   - weights: The weights associated with each element.
     public func randomElement(weights: [Int]) -> Element? {
-        return randomElement(weights: weights, using: &Random.default)
+        var g = SystemRandomNumberGenerator()
+        return randomElement(weights: weights, using: &g)
     }
 }
 
@@ -98,7 +93,8 @@ extension Array {
     /// - Parameters:
     ///   - n: Number of elements to return.
     public func randomElements(n: Int) -> [Element]? {
-        return randomElements(n: n, weights: [Double](repeating: 1, count: count), using: &Random.default)
+        var g = SystemRandomNumberGenerator()
+        return randomElements(n: n, weights: [Double](repeating: 1, count: count), using: &g)
     }
     
     /// Returns distinct `n` elements.
@@ -112,9 +108,7 @@ extension Array {
     public func randomElements<F: BinaryFloatingPoint, G: RandomNumberGenerator>(n: Int,
                                                                                  weights: [F],
                                                                                  using generator: inout G) -> [Element]?
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
+        where F.RawSignificand : FixedWidthInteger {
             precondition(weights.count == count, "`odds` size must match with array size.")
             precondition(n >= 0, "`n` must be positive.")
             precondition(weights.all { $0 >= 0 }, "All elements of `weights` must be positive.")
@@ -147,10 +141,9 @@ extension Array {
     ///   - generator: RandomNumberGenerator to use.
     public func randomElements<F: BinaryFloatingPoint>(n: Int,
                                                        weights: [F]) -> [Element]?
-        where F.RawSignificand : FixedWidthInteger,
-        F.RawSignificand.Stride : SignedInteger,
-        F.RawSignificand.Magnitude : UnsignedInteger {
-            return randomElements(n: n, weights: weights, using: &Random.default)
+        where F.RawSignificand : FixedWidthInteger {
+            var g = SystemRandomNumberGenerator()
+            return randomElements(n: n, weights: weights, using: &g)
     }
     
     /// Returns distinct `n` elements.
@@ -176,7 +169,8 @@ extension Array {
     ///   - weights: The probabilities associated with each element.
     public func randomElements(n: Int,
                                weights: [Int]) -> [Element]? {
-        return randomElements(n: n, weights: weights, using: &Random.default)
+        var g = SystemRandomNumberGenerator()
+        return randomElements(n: n, weights: weights, using: &g)
     }
 }
 
@@ -195,7 +189,8 @@ extension Array {
     /// - Parameters:
     ///   - includesEmpty: If true, generated slice can be empty. Default is `false`.
     public func randomSlice(includesEmpty: Bool = false) -> ArraySlice<Element> {
-        return randomSlice(includesEmpty: includesEmpty, using: &Random.default)
+        var g = SystemRandomNumberGenerator()
+        return randomSlice(includesEmpty: includesEmpty, using: &g)
     }
     
     /// Generate random range in array.
@@ -230,6 +225,7 @@ extension Array {
     /// - Parameters:
     ///   - includesEmpty: If true, generated range can be empty. Default is `false`.
     public func randomRange(includesEmpty: Bool = false) -> CountableRange<Int> {
-        return randomRange(includesEmpty: includesEmpty, using: &Random.default)
+        var g = SystemRandomNumberGenerator()
+        return randomRange(includesEmpty: includesEmpty, using: &g)
     }
 }

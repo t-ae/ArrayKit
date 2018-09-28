@@ -15,8 +15,7 @@ array.modes()! // Set([1, 2])
 ## Random pick/shuffle
 ```swift
 let array = [3, 4, 5, 6]
-array.randomPick()! // Pick random element
-array.shuffled() // Shuffled array
+array.randomElement(weights: [0, 0,25, 0.25, 0.5])! // Pick random element along weights
 ```
 
 ## Sort two associated `Array`s with `argsort`

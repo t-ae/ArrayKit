@@ -24,5 +24,8 @@ let package = Package(
         .testTarget(
             name: "ArrayKitTests",
             dependencies: ["ArrayKit"]),
+        .testTarget(
+            name: "PerformanceTests",
+            dependencies: ["ArrayKit"]),
     ]
 )

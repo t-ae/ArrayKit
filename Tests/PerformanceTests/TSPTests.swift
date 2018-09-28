@@ -47,6 +47,7 @@ private func crossover(_ a: Individual, _ b: Individual) -> (Individual, Individ
     return (l, r)
 }
 
+#if !DEBUG
 class TSPTests: XCTestCase {
     
     let N = 256
@@ -114,3 +115,4 @@ class TSPTests: XCTestCase {
         print("distance: \(distances[index]), true: \(minimumTotalDistance)")
     }
 }
+#endif

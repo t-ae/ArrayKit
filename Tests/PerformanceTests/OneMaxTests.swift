@@ -28,7 +28,7 @@ private func describe(_ i: [Bool]) -> String {
     return String(i.map { $0 ? "1" : "0" })
 }
 
-#if !SWIFT_PACKAGE
+#if !DEBUG
 class OneMaxTests: XCTestCase {
     
     let N = 128

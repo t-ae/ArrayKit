@@ -1,6 +1,8 @@
 import XCTest
 import ArrayKit
 
+#if !DEBUG
+
 class PerformanceTests: XCTestCase {  }
 
 // MARK: - Sum
@@ -128,3 +130,5 @@ extension PerformanceTests {
         }
     }
 }
+
+#endif

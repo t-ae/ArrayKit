@@ -17,11 +17,11 @@ extension Array {
             }
             
             precondition(cumulativeWeights.first! >= 0, "`cumulativeWeights` must start with positive value.")
-            precondition(zip(cumulativeWeights, cumulativeWeights.dropFirst()).all { $0 <= $1 },
+            precondition(zip(cumulativeWeights, cumulativeWeights.dropFirst()).allSatisfy { $0 <= $1 },
                          "`cumulativeWeights` is not ascending.")
             
             let r = F.random(in: 0..<cumulativeWeights.last!, using: &generator)
-            let index = cumulativeWeights.index { $0 > r }!
+            let index = cumulativeWeights.firstIndex { $0 > r }!
             return self[index]
     }
     
@@ -111,8 +111,8 @@ extension Array {
         where F.RawSignificand : FixedWidthInteger {
             precondition(weights.count == count, "`odds` size must match with array size.")
             precondition(n >= 0, "`n` must be positive.")
-            precondition(weights.all { $0 >= 0 }, "All elements of `weights` must be positive.")
-            precondition(weights.some { $0 > 0 }, "All elements of `weights` are 0.")
+            precondition(weights.allSatisfy { $0 >= 0 }, "All elements of `weights` must be positive.")
+            precondition(weights.contains { $0 > 0 }, "All elements of `weights` are 0.")
             
             guard n <= count else {
                 return nil
@@ -124,7 +124,7 @@ extension Array {
             for _ in 0..<n {
                 let cumulativeWeights = weights.scan(0, +)
                 let r = F.random(in: 0..<cumulativeWeights.last!, using: &generator)
-                let i = cumulativeWeights.index { r <= $0 }!
+                let i = cumulativeWeights.firstIndex { r <= $0 }!
                 weights[i] = 0 // won't select again
                 resultIndices.append(i)
             }

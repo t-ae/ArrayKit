@@ -18,7 +18,7 @@ class SearchingTests: XCTestCase {
         }
         do {
             let string = "humpty dumpty sat on a wall"
-            XCTAssertEqual(string.argmin(), string.index(of: " "))
+            XCTAssertEqual(string.argmin(), string.firstIndex(of: " "))
         }
     }
     
@@ -38,7 +38,7 @@ class SearchingTests: XCTestCase {
         }
         do {
             let string = "humpty dumpty sat on a wall"
-            XCTAssertEqual(string.argmax(), string.index(of: "y"))
+            XCTAssertEqual(string.argmax(), string.firstIndex(of: "y"))
         }
     }
 }
